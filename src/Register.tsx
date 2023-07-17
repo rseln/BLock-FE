@@ -3,15 +3,12 @@ import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
 import CssBaseline from '@mui/material/CssBaseline';
 import TextField from '@mui/material/TextField';
-import FormControlLabel from '@mui/material/FormControlLabel';
-import Checkbox from '@mui/material/Checkbox';
 import Link from '@mui/material/Link';
 import Grid from '@mui/material/Grid';
 import Box from '@mui/material/Box';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
-import { createTheme, ThemeProvider } from '@mui/material/styles';
 
 async function RegisterUser(credentials) {
     return fetch('http://localhost:8080/login',{
@@ -24,8 +21,6 @@ async function RegisterUser(credentials) {
 }
 
 
-// TODO remove, this demo shouldn't need to reset the theme.
-const defaultTheme = createTheme();
 
 export default function SignUp({setToken}) {
     const [email, setEmail] = React.useState<string | undefined>()
@@ -40,7 +35,6 @@ export default function SignUp({setToken}) {
     }
 
   return (
-    <ThemeProvider theme={defaultTheme}>
       <Container component="main" maxWidth="xs">
         <CssBaseline />
         <Box
@@ -51,7 +45,7 @@ export default function SignUp({setToken}) {
             alignItems: 'center',
           }}
         >
-          <Avatar sx={{ m: 1, bgcolor: 'secondary.main' }}>
+          <Avatar sx={{ m: 1, bgcolor: '#92D1CF' }}>
             <LockOutlinedIcon />
           </Avatar>
           <Typography component="h1" variant="h5">
@@ -131,6 +125,5 @@ export default function SignUp({setToken}) {
           </Box>
         </Box>
       </Container>
-    </ThemeProvider>
   );
 }
