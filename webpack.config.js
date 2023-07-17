@@ -17,7 +17,9 @@ module.exports = {
         directory: path.join(__dirname, "build"),
     },
     port: 3000,
+    historyApiFallback: true,
     },
+    target: 'web',
     module: {
         rules: [
             // `js` and `jsx` files are parsed using `babel`
