@@ -25,7 +25,7 @@ export default function ButtonAppBar(props) {
             <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
                 B - Lock
             </Typography>
-            <Button color="inherit">INHERIT FROM PROP</Button>
+            <Button color="inherit">Logout</Button>
             </Toolbar>
         </AppBar>
         </Box>
