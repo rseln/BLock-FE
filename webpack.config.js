@@ -34,6 +34,7 @@ module.exports = {
             loader: "ts-loader" 
             }
         ],
+        strictExportPresence: false,
     },
     resolve: {
         extensions: ["*", ".js", ".jsx", ".ts", ".tsx"],    
