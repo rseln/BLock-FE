@@ -6,13 +6,14 @@ import Typography from '@mui/material/Typography';
 import Button from '@mui/material/Button';
 import IconButton from '@mui/material/IconButton';
 import MenuIcon from '@mui/icons-material/Menu';
+import { Container, CssBaseline } from '@mui/material';
 
 export default function ButtonAppBar(props) {
   return (
     <div>
-        <Box sx={{ flexGrow: 1 }}>
+      <Box sx={{ flexGrow: 1 }}>
         <AppBar position="static">
-            <Toolbar>
+          <Toolbar>
             <IconButton
                 size="large"
                 edge="start"
@@ -20,19 +21,20 @@ export default function ButtonAppBar(props) {
                 aria-label="menu"
                 sx={{ mr: 2 }}
             >
-                <MenuIcon />
+              <MenuIcon />
             </IconButton>
             <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
-                B - Lock
+              B - Lock
             </Typography>
             <Button color="inherit">Logout</Button>
-            </Toolbar>
+          </Toolbar>
         </AppBar>
-        </Box>
-      <div className="content">
-        {props.children}
-      </div>
+      </Box>
+      <Container maxWidth="sm">
+      <CssBaseline />
 
+        {props.children}
+      </Container>
     </div>
   );
 }

@@ -4,7 +4,7 @@ import CssBaseline from '@mui/material/CssBaseline';
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
-import { createTheme, ThemeProvider } from '@mui/material/styles';
+import { createTheme } from '@mui/material/styles';
 import { FormControl, InputLabel, NativeSelect } from '@mui/material';
 import Stack from '@mui/material/Stack';
 
@@ -25,8 +25,6 @@ import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 //     }).then(data => data.json())
 // }
 
-const defaultTheme = createTheme();
-
 const Booking = () => {
   const [startTime, setStartTime] = React.useState<Dayjs  | null>(dayjs('2022-04-17T15:30'));
   const [endTime, setEndTime] = React.useState<Dayjs  | null>(dayjs('2022-04-17T15:30'));
@@ -37,7 +35,6 @@ const Booking = () => {
   }
 
   return (
-    <ThemeProvider theme={defaultTheme}>
       <Container component="main" maxWidth="sm">
         <CssBaseline />
         <Box
@@ -106,7 +103,6 @@ const Booking = () => {
           </Box>
         </Box>
       </Container>
-    </ThemeProvider>
   );
 }
 

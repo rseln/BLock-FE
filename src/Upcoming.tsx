@@ -2,7 +2,7 @@ import CssBaseline from "@mui/material/CssBaseline";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
-import { createTheme, ThemeProvider } from "@mui/material/styles";
+import { createTheme } from "@mui/material/styles";
 import EditIcon from "@mui/icons-material/Edit";
 import {
     Divider,
@@ -38,11 +38,8 @@ const bookings: IBooking[] = [
   },
 ];
 
-const defaultTheme = createTheme();
-
 const Upcoming = () => {
   return (
-    <ThemeProvider theme={defaultTheme}>
       <Container component="main" maxWidth="sm">
         <CssBaseline />
         <Box
@@ -79,7 +76,6 @@ const Upcoming = () => {
             </List>
         </Box>
       </Container>
-    </ThemeProvider>
   );
 };
 

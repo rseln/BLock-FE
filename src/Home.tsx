@@ -33,16 +33,15 @@ const Home = () => {
     }
   return (
     <Container component="main" maxWidth="sm">
-      <CssBaseline />
       <Box
         sx={{
-          marginTop: 8,
+          marginTop: 20,
           display: 'flex',
           flexDirection: 'column',
-          alignItems: 'center',
+          alignItems: 'left',
         }}
       >
-        <Typography align="center" component="h2" variant="h2" sx={{ p: 5 }}>
+        <Typography align="left" component="h2" variant="h2" sx={{ py: 5 }}>
           {estimateTime()}
         </Typography>
         
