@@ -26,7 +26,8 @@ async function RegisterUser(credentials) {
         headers: {
             'Content-Type': 'application/json'
         },
-        body: JSON.stringify(credentials)
+        body: JSON.stringify(credentials),
+        mode: 'cors'
         // body: JSON.stringify(test)
       })
       // .then(data => data.json())
