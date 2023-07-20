@@ -54,5 +54,6 @@
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-router-dom": "^6.14.1"
-  }
+  },
+  "proxy": "https://59bb-72-142-18-42.ngrok-free.app"
 }

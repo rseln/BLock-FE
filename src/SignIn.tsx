@@ -19,18 +19,22 @@ async function LoginUser(credentials) {
             'Content-Type': 'application/json'
         },
         body: JSON.stringify(credentials)
-    }).then(data => data.json())
+    })
+    .then(data => data.json())
+    .catch((error) => {
+      console.log(error)
+    })
 }
 
 
 const SignIn = ({setToken}) => {
-  const [Email, setEmail] = React.useState<string | undefined>()
+  const [email, setEmail] = React.useState<string | undefined>()
   const [password, setPassword] = React.useState<string | undefined>()
   
   const handleSubmit = async (e) => {
       e.preventDefault()
       const token = await LoginUser({
-          Email,
+          email,
           password
       })
       setToken(token)

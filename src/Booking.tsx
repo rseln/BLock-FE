@@ -15,24 +15,38 @@ import { TimePicker } from '@mui/x-date-pickers/TimePicker';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 
 
-// async function LoginUser(credentials) {
-//     return fetch('http://localhost:8080/login',{
-//         method: 'POST',
-//         headers: {
-//             'Content-Type': 'application/json'
-//         },
-//         body: JSON.stringify(credentials)
-//     }).then(data => data.json())
-// }
+async function submitLockBooking(credentials) {
+  const link = 'https://59bb-72-142-18-42.ngrok-free.app'
+  return fetch(`${link}'/bookings/create'`,{
+      method: 'POST',
+      headers: {
+          'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(credentials)
+  })
+  .then(data => data.json())
+  .catch((error) => {
+    console.log(error)
+  })
+}
 
 const Booking = () => {
-  const [startTime, setStartTime] = React.useState<Dayjs  | null>(dayjs('2022-04-17T15:30'));
-  const [endTime, setEndTime] = React.useState<Dayjs  | null>(dayjs('2022-04-17T15:30'));
-
-  
+  const user_id = ""
+  var now = dayjs()
+  const [deviceID, setDeviceID] = React.useState<string |null>("");
+  const [startTime, setStartTime] = React.useState<Dayjs>(now);
+  const [endTime, setEndTime] = React.useState<Dayjs>(now);
+    
   const handleSubmit = async (e) => {
-      e.preventDefault()
-  }
+    e.preventDefault()
+    const token = await submitLockBooking({
+        deviceID,
+        user_id,
+        startTime,
+        endTime
+    })
+    // setToken(token) what does this do?
+}
 
   return (
       <Container component="main" maxWidth="sm">
@@ -49,21 +63,28 @@ const Booking = () => {
             Booking a Lock
           </Typography>
           <Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 1 }}>
-          <Stack direction="row" spacing={2} sx={{marginBlock: 3}}>
+            <Typography component="h5" variant="h5" sx={{ mt: 2 }}>
+              Select a Day
+            </Typography>
             <LocalizationProvider dateAdapter={AdapterDayjs}>
-              <DatePicker sx={{width: "-webkit-fill-available"}}/>
+              <DatePicker sx={{width: "-webkit-fill-available", my: 3}}/>
             </LocalizationProvider>
-          </Stack>
-            <Stack direction="row" spacing={2}>
+            <Typography component="h5" variant="h5">
+              Select a Time
+            </Typography>
+            <Stack direction="row" spacing={2} sx={{my: 3}}>
               <LocalizationProvider dateAdapter={AdapterDayjs}>
                 <TimePicker
                   label="Start Time"
                   value={startTime}
+                  // if date it today, make sure min time is not a previous time
+                  // minTime={today ? now : dayjs().set('hour', 0)} // NOT SURE IF IT SHOULD BE 0 OR WHAT
                   onChange={(newValue) => setStartTime(newValue)}
                 />
                 <TimePicker
                   label="End Time"
                   value={endTime}
+                  maxTime={startTime.add(3, 'hour')}
                   onChange={(newValue) => setEndTime(newValue)}
                 />
               </LocalizationProvider>

@@ -11,27 +11,49 @@ import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 
 async function RegisterUser(credentials) {
-    return fetch('http://localhost:8080/login',{
+  const test = {
+    "first_name": 'NOT',
+    "last_name": 'Posie',
+    "email": 'rosedawg@uwaterloo.ca',
+    "password": 'password',
+    "daily_credits_available": 120,
+    "watiam": null
+}
+  console.log(credentials)
+  const link = 'https://59bb-72-142-18-42.ngrok-free.app'
+    return fetch(`${link}/user/create`,{
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'
         },
         body: JSON.stringify(credentials)
-    }).then(data => data.json())
+        // body: JSON.stringify(test)
+      })
+      // .then(data => data.json())
 }
 
 
 
 export default function SignUp({setToken}) {
+    const DAILY_CREDS = 120
+    const [firstName, setFirstName] = React.useState<string | undefined>()
+    const [lastName, setLastName] = React.useState<string | undefined>()
     const [email, setEmail] = React.useState<string | undefined>()
     const [password, setPassword] = React.useState<string | undefined>()
+    const [watIAM, setWatIAM] = React.useState<string | undefined>()
+
     
     const handleSubmit = async (e) => {
         e.preventDefault()
         const token = await RegisterUser({
-            email,
-            password
+          firstName,
+          lastName,
+          email,
+          password,
+          DAILY_CREDS,
+          watIAM,
         })
+        console.log("TOKEN", token)
     }
 
   return (
@@ -62,6 +84,7 @@ export default function SignUp({setToken}) {
                   id="firstName"
                   label="First Name"
                   autoFocus
+                  onChange={(e)=>setFirstName(e.target.value)}
                 />
               </Grid>
               <Grid item xs={12} sm={6}>
@@ -72,6 +95,7 @@ export default function SignUp({setToken}) {
                   label="Last Name"
                   name="lastName"
                   autoComplete="family-name"
+                  onChange={(e)=>setLastName(e.target.value)}
                 />
               </Grid>
               <Grid item xs={12}>
@@ -82,6 +106,7 @@ export default function SignUp({setToken}) {
                   label="Email Address"
                   name="email"
                   autoComplete="email"
+                  onChange={(e)=>setEmail(e.target.value)}
                 />
               </Grid>
               <Grid item xs={12}>
@@ -91,6 +116,7 @@ export default function SignUp({setToken}) {
                   label="WatIAM"
                   name="WatIAM"
                   autoComplete="WatIAM"
+                  onChange={(e)=>setWatIAM(e.target.value)}
                 />
               </Grid>
               <Grid item xs={12}>
@@ -102,6 +128,7 @@ export default function SignUp({setToken}) {
                   type="password"
                   id="password"
                   autoComplete="new-password"
+                  onChange={(e)=>setPassword(e.target.value)}
                 />
               </Grid>
               <Grid item xs={12}>
