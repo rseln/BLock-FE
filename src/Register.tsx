@@ -10,6 +10,8 @@ import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 
+const link = ' https://59bb-72-142-18-42.ngrok-free.app'
+
 async function RegisterUser(credentials) {
   const test = {
     "first_name": 'NOT',
@@ -20,17 +22,36 @@ async function RegisterUser(credentials) {
     "watiam": null
 }
   console.log(credentials)
-  const link = 'https://59bb-72-142-18-42.ngrok-free.app'
-    return fetch(`${link}/user/create`,{
+  let headers = new Headers();
+
+  headers.append('Content-Type', 'application/json');
+  headers.append('Accept', 'application/json');
+  headers.append('Authorization', 'Basic ');
+  headers.append('Origin','http://localhost:3000');
+
+    return fetch(`${link}/users/create`,{
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'
         },
-        body: JSON.stringify(credentials),
-        mode: 'cors'
-        // body: JSON.stringify(test)
+        // body: JSON.stringify(credentials),
+        // mode: 'no-cors',
+        body: JSON.stringify(test)
       })
       // .then(data => data.json())
+}
+
+async function getUser() {
+    return fetch(`${link}/users/create`,{
+        method: 'GET',
+        // headers: {
+        //     'Content-Type': 'application/json'
+        // },
+        // body: JSON.stringify(credentials),
+        // mode: 'no-cors',
+        // body: JSON.stringify(test)
+      })
+      .then(data => console.log("DATA", data.json()))
 }
 
 
@@ -46,15 +67,16 @@ export default function SignUp({setToken}) {
     
     const handleSubmit = async (e) => {
         e.preventDefault()
-        const token = await RegisterUser({
-          firstName,
-          lastName,
-          email,
-          password,
-          DAILY_CREDS,
-          watIAM,
-        })
-        console.log("TOKEN", token)
+        // const token = await RegisterUser({
+        //   firstName,
+        //   lastName,
+        //   email,
+        //   password,
+        //   DAILY_CREDS,
+        //   watIAM,
+        // })
+        // console.log("TOKEN", token)
+        await getUser()
     }
 
   return (

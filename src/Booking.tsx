@@ -5,7 +5,7 @@ import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import { createTheme } from '@mui/material/styles';
-import { FormControl, InputLabel, NativeSelect } from '@mui/material';
+import { FormControl, InputLabel, Select, MenuItem } from '@mui/material';
 import Stack from '@mui/material/Stack';
 
 import dayjs, { Dayjs } from 'dayjs';
@@ -33,7 +33,7 @@ async function submitLockBooking(credentials) {
 const Booking = () => {
   const user_id = ""
   var now = dayjs()
-  const [deviceID, setDeviceID] = React.useState<string |null>("");
+  const [deviceID, setDeviceID] = React.useState<string | null>("");
   const [startTime, setStartTime] = React.useState<Dayjs>(now);
   const [endTime, setEndTime] = React.useState<Dayjs>(now);
     
@@ -46,7 +46,7 @@ const Booking = () => {
         endTime
     })
     // setToken(token) what does this do?
-}
+  }
 
   return (
       <Container component="main" maxWidth="sm">
@@ -89,27 +89,32 @@ const Booking = () => {
                 />
               </LocalizationProvider>
             </Stack>
+            <Typography component="h5" variant="h5">
+              Select a Lock (Optional)
+            </Typography>
             <FormControl fullWidth sx={{marginBlock: 3}}>
-              <InputLabel variant="standard" htmlFor="uncontrolled-native">
+              <InputLabel id="select-lock-label">
                 Select a lock
               </InputLabel>
-              <NativeSelect
-                defaultValue={30}
-                inputProps={{
-                  name: 'lockNum',
-                  // id: 'uncontrolled-native',
-                }}
+              <Select
+                labelId="select-lock-label"
+                id="select-lock"
+                value={deviceID}
+                label="Select a lock"
+                onChange={(e) => setDeviceID(e.target.value)}
               >
-                <option value={123}>Lock 123</option>
-                <option value={234}>Lock 234</option>
-                <option value={345}>Lock 345</option>
-              </NativeSelect>
+                <MenuItem value={""}>No Selection</MenuItem>
+                <MenuItem value={"123"}>Lock 123</MenuItem>
+                <MenuItem value={"234"}>Lock 234</MenuItem>
+                <MenuItem value={"345"}>Lock 345</MenuItem>
+              </Select>
             </FormControl>
             <Stack direction="row" spacing={2}>
               <Button
                 type="submit"
                 fullWidth
                 variant="outlined"
+                href="/"
               >
                 Cancel
               </Button>
