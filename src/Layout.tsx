@@ -9,22 +9,21 @@ import { Container, CssBaseline } from '@mui/material';
 import { useLocation, useNavigate } from "react-router-dom";
 
 
-export default function ButtonAppBar(props) {
+export default function ButtonAppBar({ isLogged, setIsLogged, setOpen, open, ...props }) {
   const navigate = useNavigate(); 
   const location = useLocation();
-  console.log(location.pathname);
   
-  if(location.pathname === "/login" || location.pathname === "/register"){
-    props.setIsLogged(false)
+  if(location.pathname === "/login" || location.pathname === "/register" || location.pathname === "/welcome"){
+    setIsLogged(false)
   }
 
   const handleLoginState = () => {
-    if (props.isLogged) {
-      props.setIsLogged(false)
+    if (isLogged) {
+      setIsLogged(false)
       let path = `/login`; 
       navigate(path);
     } else {
-      let path = `/welcome`; 
+      let path = `/login`; 
       navigate(path);
     }
   }
@@ -40,13 +39,14 @@ export default function ButtonAppBar(props) {
                 color="inherit"
                 aria-label="menu"
                 sx={{ mr: 2 }}
+                onClick={() => setOpen(!open)}
             >
               <MenuIcon />
             </IconButton>
             <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
               B - Lock
             </Typography>
-            <Button color="inherit" onClick={handleLoginState} >{props.isLogged ? "Logout" : "Login"}</Button>
+            <Button color="inherit" onClick={handleLoginState} >{isLogged ? "Logout" : "Login"}</Button>
           </Toolbar>
         </AppBar>
       </Box>
