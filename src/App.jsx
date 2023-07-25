@@ -9,6 +9,7 @@ import Bookings from "./Bookings";
 import Booking from "./Booking";
 import Layout from "./Layout";
 import Upcoming from "./Upcoming";
+import Welcome from "./Welcome";
 import { useOnClickOutside } from './hooks';
 import React, { useEffect, useState } from "react";
 
@@ -22,6 +23,7 @@ const theme = createTheme({
 });
 
 function App() {
+  const [isLogged, setIsLogged] = useState(true);
   const [open, setOpen] = useState(false);
   // useOnClickOutside(node, () => setOpen(false));
 
@@ -29,7 +31,7 @@ function App() {
     <BrowserRouter>
       <ThemeProvider theme={theme}>
         <CssBaseline />
-        <Layout>
+        <Layout isLogged={isLogged} setIsLogged={setIsLogged}>
           <Routes>
             <Route path="/" element={<Home />} />
             <Route path="/register" element={<Register />} />
@@ -37,6 +39,7 @@ function App() {
             <Route path="/bookings" element={<Bookings />} />
             <Route path="/booking" element={<Booking />} />
             <Route path="/upcoming" element={<Upcoming />} />
+            <Route path="/welcome" element={<Welcome />} />
           </Routes>
           {/* <div ref={node}>
             <Burger open={open} setOpen={setOpen} />

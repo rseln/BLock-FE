@@ -21,21 +21,21 @@ interface IBooking {
 }
 
 const bookings: IBooking[] = [
-  { 
-    date: "Wednesday, July 19, 2023", 
-    startTime: "10:00 am",
-    endTime: "11:00 am"
-  },
-  {
-    date: "Thursday, July 20, 2023", 
-    startTime: "5:30 pm",
-    endTime: "7:00 pm"
-  },
-  {
-    date: "Sunday, July 23, 2023",
-    startTime: "7:30 pm",
-    endTime: "9:00 pm"
-  },
+  // { 
+  //   date: "Wednesday, July 19, 2023", 
+  //   startTime: "10:00 am",
+  //   endTime: "11:00 am"
+  // },
+  // {
+  //   date: "Thursday, July 20, 2023", 
+  //   startTime: "5:30 pm",
+  //   endTime: "7:00 pm"
+  // },
+  // {
+  //   date: "Sunday, July 23, 2023",
+  //   startTime: "7:30 pm",
+  //   endTime: "9:00 pm"
+  // },
 ];
 
 const Upcoming = () => {
@@ -54,7 +54,8 @@ const Upcoming = () => {
             Upcoming Bookings
           </Typography>
             <List>
-              {bookings.map((product, idx) => {
+              {bookings.length > 0 ?
+              (bookings.map((product, idx) => {
                 return (
                   <>
                     {idx !== 0 && <Divider variant="middle" component="li" />}
@@ -72,7 +73,10 @@ const Upcoming = () => {
                     </ListItem>
                   </>
                 );
-              })}
+              })) 
+              : <>
+                  You don't have any locks reserved!
+                </>}
             </List>
         </Box>
       </Container>
