@@ -1,7 +1,7 @@
-import React, {useState} from 'react'
+import React, {useState, useEffect} from 'react'
 import Login from "./Login";
 import SignIn from "./SignIn";
-import BookingDetail from '../components/BookingDetail';
+import BookingDetail from './components/BookingDetail';
 import { Typography } from '@mui/material';
 import Paper from '@mui/material/Paper';
 import Stack from '@mui/material/Stack';
@@ -9,7 +9,6 @@ import Box from '@mui/material/Box';
 import Grid from '@mui/material/Grid';
 import Container from '@mui/material/Container';
 import CssBaseline from '@mui/material/CssBaseline';
-
 
 const estimateTime = () => {
   const today = new Date() 
@@ -27,10 +26,32 @@ const estimateTime = () => {
 }
 
 const Home = () => {
-    const [token, setToken] = useState()
-    if(false){
-        {return <SignIn setToken={setToken}/>}
-    }
+  const [token, setToken] = useState()
+  const [bookings, setBookings] = useState([])
+
+  if(false){
+    {return <SignIn setToken={setToken}/>}
+  }
+
+  // TODO: we want to get with user_id param
+  const getBookings = () => {
+    const link = 'https://59bb-72-142-18-42.ngrok-free.app'
+    fetch(`${link}'/bookings/'`,{
+        method: 'GET',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+    })
+    .then(response  => {return response.json()})
+    .then(data => {
+      setBookings(data)
+    })
+  }
+
+  // useEffect(() => {
+  //   getBookings()
+  // }, [])
+
   return (
     <Container component="main" maxWidth="sm">
       <Box
@@ -44,10 +65,19 @@ const Home = () => {
         <Typography align="left" component="h2" variant="h2" sx={{ py: 5 }}>
           {estimateTime()}
         </Typography>
+        { bookings.length === 0 ? 
+          (<Typography align="left" component="h5" variant="h5" sx={{ py: 5 }}>
+            You have no lockers booked right now.  
+          </Typography>)
+          :
+          // NOT SURE WHAT THE DATA LOOKS LIKE SO HERES SOME SCUFFED CODE:
+          (<>
+          <BookingDetail text="Locker Number" value={bookings[0].lockNum}></BookingDetail>
+          <BookingDetail text="Key" value={bookings[0].password}></BookingDetail>
+          <BookingDetail text="Booking Time Frame" value={bookings[0].timeFrame}></BookingDetail>
+          </>)
+        }
         
-        <BookingDetail text="Locker Number" value="3029"></BookingDetail>
-        <BookingDetail text="Key" value="5968"></BookingDetail>
-        <BookingDetail text="Booking Time Frame" value="WE GOTTA MAKE THIS BETTER"></BookingDetail>
       </Box>
     </Container>
   )

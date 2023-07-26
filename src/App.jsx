@@ -10,10 +10,10 @@ import Booking from "./Booking";
 import Layout from "./Layout";
 import Upcoming from "./Upcoming";
 import Welcome from "./Welcome";
-import { useOnClickOutside } from './hooks';
+import { useOnClickOutside } from './util/hooks';
 import React, { useEffect, useState, useRef } from "react";
-import Burger from "../components/Burger"
-import Menu from "../components/Menu"
+import Burger from "./components/Burger"
+import Menu from "./components/Menu"
 
 const theme = createTheme({
   palette: {
@@ -50,7 +50,7 @@ function App() {
           </Routes>
           <div ref={node}>
             {/* <Burger open={open} setOpen={setOpen} /> */}
-            <Menu open={open} setOpen={setOpen} />
+            <Menu open={open} setOpen={setOpen} setIsLogged={setIsLogged}/>
           </div>
         </Layout>
       </ThemeProvider>
