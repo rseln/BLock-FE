@@ -1,3 +1,4 @@
+import React, {useState, useEffect} from 'react'
 import CssBaseline from "@mui/material/CssBaseline";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
@@ -20,7 +21,7 @@ interface IBooking {
   // lock: number
 }
 
-const bookings: IBooking[] = [
+const mockBookings: IBooking[] = [
   { 
     date: "Wednesday, July 19, 2023", 
     startTime: "10:00 am",
@@ -39,6 +40,27 @@ const bookings: IBooking[] = [
 ];
 
 const Upcoming = () => {
+  const [bookings, setBookings] = useState(mockBookings)
+
+  // TODO: we want to get with user_id param
+  const getBookings = () => {
+    const link = 'https://59bb-72-142-18-42.ngrok-free.app'
+    fetch(`${link}'/bookings/'`,{
+        method: 'GET',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+    })
+    .then(response  => {return response.json()})
+    .then(data => {
+      setBookings(data)
+    })
+  }
+
+  // useEffect(() => {
+  //   getBookings()
+  // }, [])
+
   return (
       <Container component="main" maxWidth="sm">
         <CssBaseline />
