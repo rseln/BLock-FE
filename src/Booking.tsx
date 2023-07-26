@@ -16,6 +16,7 @@ import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 
 
 async function submitLockBooking(credentials) {
+  console.log(JSON.stringify(credentials))
   const link = 'https://59bb-72-142-18-42.ngrok-free.app'
   return fetch(`${link}'/bookings/create'`,{
       method: 'POST',
@@ -30,20 +31,23 @@ async function submitLockBooking(credentials) {
   })
 }
 
-const Booking = () => {
-  const user_id = ""
+const Booking = ({userID}) => {
   var now = dayjs()
   const [deviceID, setDeviceID] = React.useState<string | null>("");
   const [startTime, setStartTime] = React.useState<Dayjs>(now);
   const [endTime, setEndTime] = React.useState<Dayjs>(now);
+  const [date, setDate] = React.useState<Dayjs>(now);
     
   const handleSubmit = async (e) => {
     e.preventDefault()
+    let dateString = date.format('YYYY-MM-DD')
+    let start = dateString + " " + startTime.format('HH:mm:ss')
+    let end = dateString + " " + endTime.format('HH:mm:ss')
     const token = await submitLockBooking({
         deviceID,
-        user_id,
-        startTime,
-        endTime
+        userID,
+        start,
+        end
     })
     // setToken(token) what does this do?
   }
@@ -67,7 +71,12 @@ const Booking = () => {
               Select a Day
             </Typography>
             <LocalizationProvider dateAdapter={AdapterDayjs}>
-              <DatePicker sx={{width: "-webkit-fill-available", my: 3}}/>
+              <DatePicker 
+                label="Date"
+                value={date}
+                onChange={(newValue) => setDate(newValue)}
+                sx={{width: "-webkit-fill-available", my: 3}}
+              />
             </LocalizationProvider>
             <Typography component="h5" variant="h5">
               Select a Time
@@ -77,6 +86,7 @@ const Booking = () => {
                 <TimePicker
                   label="Start Time"
                   value={startTime}
+                  minutesStep={15}
                   // if date it today, make sure min time is not a previous time
                   // minTime={today ? now : dayjs().set('hour', 0)} // NOT SURE IF IT SHOULD BE 0 OR WHAT
                   onChange={(newValue) => setStartTime(newValue)}
@@ -84,6 +94,7 @@ const Booking = () => {
                 <TimePicker
                   label="End Time"
                   value={endTime}
+                  minutesStep={15}
                   maxTime={startTime.add(3, 'hour')}
                   onChange={(newValue) => setEndTime(newValue)}
                 />
