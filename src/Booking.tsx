@@ -41,13 +41,13 @@ const Booking = ({userID}) => {
   const handleSubmit = async (e) => {
     e.preventDefault()
     let dateString = date.format('YYYY-MM-DD')
-    let start = dateString + " " + startTime.format('HH:mm:ss')
-    let end = dateString + " " + endTime.format('HH:mm:ss')
+    let start_time = dateString + " " + startTime.format('HH:mm:ss')
+    let end_time = dateString + " " + endTime.format('HH:mm:ss')
     const token = await submitLockBooking({
-        deviceID,
-        userID,
-        start,
-        end
+        device_id: deviceID,
+        user_id: userID,
+        start_time,
+        end_time
     })
     // setToken(token) what does this do?
   }
