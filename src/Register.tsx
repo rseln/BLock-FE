@@ -32,7 +32,7 @@ async function RegisterUser(credentials) {
   headers.append('Authorization', 'Basic ');
   headers.append('Origin','http://localhost:3000');
 
-    return fetch(`${link}/auth/signup/`,{
+    return fetch(`${link}/users/create`,{
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'
@@ -71,19 +71,20 @@ export default function SignUp() {
     
   const handleSubmit = async (e) => {
     e.preventDefault()
-    const token = await RegisterUser({
+    const userId = await RegisterUser({
       firstName,
       lastName,
       email,
       password,
       DAILY_CREDS,
       watIAM,
+    }).then((res)=> {
+      if (res.status === 200) {
+        navigate(`/`);
+      }
+      return res.json()
     })
-
-    if(token.status === 200){
-      navigate(`/`);
-    }
-    // await getUser()
+    sessionStorage.setItem("userId", userId[0]["user_id"])
   }
 
   return (

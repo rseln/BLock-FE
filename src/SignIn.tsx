@@ -14,7 +14,7 @@ import Container from '@mui/material/Container';
 import { useNavigate } from "react-router-dom";
 
 async function LoginUser(credentials) {
-    return fetch('http://localhost:8080/login',{
+    return fetch('http://localhost:8000/users/login',{
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'
@@ -31,21 +31,26 @@ async function LoginUser(credentials) {
 const SignIn = ({setToken}) => {
   const [email, setEmail] = React.useState<string | undefined>()
   const [password, setPassword] = React.useState<string | undefined>()
+  // const [remember, setRemember] = React.useState<boolean>(false)
   const navigate = useNavigate(); 
 
   const handleSubmit = async (e) => {
       e.preventDefault()
-      const token = await LoginUser({
+      const userId = await LoginUser({
           email,
           password
       })
-      setToken(token)
-      
-      if(token.status === 200){
+      console.log(userId)
+      if(userId.length > 0){
+        sessionStorage.setItem("userId", userId[0]["user_id"])
         navigate(`/`);
       }
   }
-
+  // const toggleRemember = () => {
+  //   console.log(remember)
+  //   setRemember(!remember)
+  //   console.log(remember)
+  // }
   return (
       <Container component="main" maxWidth="sm">
         <CssBaseline />
@@ -86,10 +91,10 @@ const SignIn = ({setToken}) => {
               autoComplete="current-password"
               onChange={(e)=>setPassword(e.target.value)}
             />
-            <FormControlLabel
-              control={<Checkbox value="remember" color="primary" />}
+            {/* <FormControlLabel
+              control={<Checkbox value="remember" color="primary" onChange={toggleRemember}/>}
               label="Remember me"
-            />
+            /> */}
             <Button
               type="submit"
               fullWidth

@@ -26,7 +26,7 @@ const theme = createTheme({
 });
 
 function App() {
-  const [isLogged, setIsLogged] = useState(true);
+  const [isLogged, setIsLogged] = useState(sessionStorage.getItem("userId") ? true : false);
   const [open, setOpen] = useState(false);
 
   const node = useRef();
@@ -42,7 +42,7 @@ function App() {
             <Route path="/register" element={<Register />} />
             <Route path="/login" element={<SignIn />} />
             <Route path="/bookings" element={<Bookings />} />
-            <Route path="/booking" element={<Booking userID={1}/>} />
+            <Route path="/booking" element={<Booking userID={2}/>} />
             <Route path="/upcoming" element={<Upcoming />} />
             <Route path="/welcome" element={<Welcome />} />
           </Routes>

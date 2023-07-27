@@ -19,22 +19,24 @@ import { proxy } from './util/constants';
 async function submitLockBooking(credentials) {
   console.log(JSON.stringify(credentials))
   const link = proxy
-  return fetch(`${link}'/bookings/create'`,{
+  const bookingId = await fetch(`${link}/bookings/create`,{
       method: 'POST',
       headers: {
           'Content-Type': 'application/json'
       },
       body: JSON.stringify(credentials)
   })
-  .then(data => data.json())
+  .then((res) => {
+    return res.json()})
   .catch((error) => {
-    console.log(error)
+    return error
   })
+  return bookingId
 }
 
 const Booking = ({userID}) => {
   var now = dayjs()
-  const [deviceID, setDeviceID] = React.useState<string | null>("");
+  const [deviceID, setDeviceID] = React.useState<Number>(0);
   const [startTime, setStartTime] = React.useState<Dayjs>(now);
   const [endTime, setEndTime] = React.useState<Dayjs>(now);
   const [date, setDate] = React.useState<Dayjs>(now);
@@ -46,10 +48,11 @@ const Booking = ({userID}) => {
     let end_time = dateString + " " + endTime.format('HH:mm:ss')
     const token = await submitLockBooking({
         device_id: deviceID,
-        user_id: userID,
+        user_id: sessionStorage.getItem("userId"),
         start_time,
         end_time
     })
+    console.log(token)
     // setToken(token) what does this do?
   }
 
@@ -113,12 +116,12 @@ const Booking = ({userID}) => {
                 id="select-lock"
                 value={deviceID}
                 label="Select a lock"
-                onChange={(e) => setDeviceID(e.target.value)}
+                onChange={(e) => setDeviceID(Number(e.target.value))}
               >
-                <MenuItem value={""}>No Selection</MenuItem>
-                <MenuItem value={"123"}>Lock 123</MenuItem>
-                <MenuItem value={"234"}>Lock 234</MenuItem>
-                <MenuItem value={"345"}>Lock 345</MenuItem>
+                <MenuItem value={0}>No Selection</MenuItem>
+                <MenuItem value={1}>Lock 1</MenuItem>
+                <MenuItem value={2}>Lock 2</MenuItem>
+                <MenuItem value={3}>Lock 3</MenuItem>
               </Select>
             </FormControl>
             <Stack direction="row" spacing={2}>
