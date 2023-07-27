@@ -11,8 +11,9 @@ import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import { useNavigate } from "react-router-dom";
+import { proxy } from './util/constants';
 
-const link = 'http://localhost:8080'
+const link = proxy
 
 async function RegisterUser(credentials) {
   const test = {

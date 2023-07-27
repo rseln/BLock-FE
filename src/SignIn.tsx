@@ -12,9 +12,12 @@ import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import { useNavigate } from "react-router-dom";
+import { proxy } from './util/constants';
+
 
 async function LoginUser(credentials) {
-    return fetch('http://localhost:8000/users/login',{
+  const link = proxy
+    return fetch(link,{
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'
