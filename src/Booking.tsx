@@ -34,7 +34,7 @@ async function submitLockBooking(credentials) {
   return bookingId
 }
 
-const Booking = ({userID}) => {
+const Booking = () => {
   var now = dayjs()
   const [deviceID, setDeviceID] = React.useState<Number>(0);
   const [startTime, setStartTime] = React.useState<Dayjs>(now);

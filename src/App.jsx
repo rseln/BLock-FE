@@ -4,7 +4,6 @@ import CssBaseline from "@mui/material/CssBaseline";
 import Home from "./Home";
 import SignIn from "./SignIn";
 import Register from "./Register";
-import Bookings from "./Bookings";
 import Booking from "./Booking";
 import Layout from "./Layout";
 import Upcoming from "./Upcoming";
@@ -41,8 +40,7 @@ function App() {
             <Route path="/" element={<Home />} />
             <Route path="/register" element={<Register />} />
             <Route path="/login" element={<SignIn />} />
-            <Route path="/bookings" element={<Bookings />} />
-            <Route path="/booking" element={<Booking userID={2}/>} />
+            <Route path="/booking" element={<Booking/>} />
             <Route path="/upcoming" element={<Upcoming />} />
             <Route path="/welcome" element={<Welcome />} />
           </Routes>
