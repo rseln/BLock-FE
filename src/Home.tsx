@@ -103,7 +103,7 @@ const Home = () => {
           alignItems: 'left',
         }}
       >
-        <Typography align="center" component="h2" variant="h2" sx={{ py: 5 }}>
+        <Typography align="center" component="h2" variant="h2" sx={{ py: 3 }}>
           {estimateTime()}
         </Typography>
         { bookings.length === 0 ? 
@@ -113,6 +113,9 @@ const Home = () => {
           :
           // NOT SURE WHAT THE DATA LOOKS LIKE SO HERES SOME SCUFFED CODE:
           (<>
+          <Typography align="center" component="h6" variant="h6">
+            Instructions: Enter the keypad code followed by # to unlock the locker. Press * to re-lock.
+          </Typography>
           <BookingDetail text="Locker Number" value={bookings[0].deviceId}></BookingDetail>
           <BookingDetail text="Keypad Code" value={keypadCode}></BookingDetail>
           <BookingDetail text="Booking Time Frame" value={bookings[0].timeFrame}></BookingDetail>
