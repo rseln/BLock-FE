@@ -103,11 +103,11 @@ const Home = () => {
           alignItems: 'left',
         }}
       >
-        <Typography align="left" component="h2" variant="h2" sx={{ py: 5 }}>
+        <Typography align="center" component="h2" variant="h2" sx={{ py: 5 }}>
           {estimateTime()}
         </Typography>
         { bookings.length === 0 ? 
-          (<Typography align="left" component="h5" variant="h5" sx={{ py: 5 }}>
+          (<Typography align="center" component="h5" variant="h5" sx={{ py: 5 }}>
             You have no lockers booked right now.  
           </Typography>)
           :

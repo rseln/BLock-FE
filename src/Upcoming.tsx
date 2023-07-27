@@ -6,7 +6,7 @@ import Container from "@mui/material/Container";
 import { createTheme } from "@mui/material/styles";
 import EditIcon from "@mui/icons-material/Edit";
 import {
-    Divider,
+  Divider,
   IconButton,
   List,
   ListItem,
@@ -42,8 +42,16 @@ const mockBookings: IBooking[] = [
   },
 ];
 
-const Upcoming = () => {
+const Upcoming = () => {  
   const [bookings, setBookings] = useState([])
+  const [this_start, setStart] = useState()
+  const [this_end, setEnd] = useState()
+
+  const handleEditBooking = (reservation) => {
+    console.log("reservation ",reservation, this_start, this_end)
+    navigate('/booking', { state: {start_time: this_start, end_time:this_end} });
+  }
+  // const [bookings, setBookings] = useState(mockBookings)
 
   const navigate = useNavigate(); 
   useEffect(() => {
@@ -55,8 +63,9 @@ const Upcoming = () => {
   // TODO: we want to get with user_id param
   const getBookings = () => {
     const link = proxy
-    const userId = 1
-    fetch(`${link}/bookings`,{
+    const userId = sessionStorage.getItem("userId")
+    console.log(userId)
+    fetch(`${link}/bookings?user_id=${userId}`,{
         method: 'GET',
         headers: {
             'Content-Type': 'application/json'
@@ -72,7 +81,13 @@ const Upcoming = () => {
 
         parsedData.push({date, startTime, endTime})
       }
+      // console.log(data.start_time)
       setBookings(parsedData)
+      if(data[0]){
+        setStart(data[0].start_time)
+        setEnd(data[0].end_time)
+      }
+      console.log(data)
     })
   }
 
@@ -96,20 +111,20 @@ const Upcoming = () => {
           </Typography>
             <List>
               {bookings.length > 0 ?
-              (bookings.map((product, idx) => {
+              (bookings.map((reservation, idx) => {
                 return (
                   <>
                     {idx !== 0 && <Divider variant="middle" component="li" />}
                     <ListItem
                       secondaryAction={
-                        <IconButton edge="end" aria-label="delete">
+                        <IconButton edge="end" aria-label="delete" onClick={() => handleEditBooking(reservation)}>
                           <EditIcon />
                         </IconButton>
                       }
                     >
                       <ListItemText
-                        primary={`${product.startTime} to ${product.endTime} on`}
-                        secondary={product.date}
+                        primary={`${reservation.startTime} to ${reservation.endTime} on`}
+                        secondary={reservation.date}
                       />
                     </ListItem>
                   </>

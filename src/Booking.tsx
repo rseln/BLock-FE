@@ -1,4 +1,4 @@
-import React, {useEffect} from 'react';
+import React, {useState, useEffect} from 'react'
 import Button from '@mui/material/Button';
 import CssBaseline from '@mui/material/CssBaseline';
 import Box from '@mui/material/Box';
@@ -14,7 +14,7 @@ import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { TimePicker } from '@mui/x-date-pickers/TimePicker';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import { proxy } from './util/constants';
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 
 
 async function submitLockBooking(credentials) {
@@ -35,6 +35,9 @@ async function submitLockBooking(credentials) {
 }
 
 const Booking = () => {
+  const {state} = useLocation();
+  console.log("state", state)
+  
   const navigate = useNavigate(); 
   useEffect(() => {
     if (sessionStorage.getItem("userId") === null) {
@@ -47,6 +50,17 @@ const Booking = () => {
   const [startTime, setStartTime] = React.useState<Dayjs>(now);
   const [endTime, setEndTime] = React.useState<Dayjs>(now);
   const [date, setDate] = React.useState<Dayjs>(now);
+
+
+  useEffect(() => {
+    if (state) {
+      // setDeviceID(state.device)
+      console.log(dayjs(state.start_time))
+      setStartTime(dayjs(state.start_time))
+      setEndTime(dayjs(state.end_time))
+      setDate(dayjs(state.end_time))
+    }
+  }, [])
     
   const handleSubmit = async (e) => {
     e.preventDefault()
@@ -59,6 +73,7 @@ const Booking = () => {
         start_time,
         end_time
     })
+    navigate(`/`);
     // setToken(token) what does this do?
   }
 
