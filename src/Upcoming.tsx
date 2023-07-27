@@ -12,6 +12,8 @@ import {
   ListItem,
   ListItemText,
 } from "@mui/material";
+import { proxy } from './util/constants';
+import { getDate, getTime } from './util/timeUtils';
 
 
 interface IBooking {
@@ -40,12 +42,13 @@ const mockBookings: IBooking[] = [
 ];
 
 const Upcoming = () => {
-  const [bookings, setBookings] = useState(mockBookings)
+  const [bookings, setBookings] = useState([])
 
   // TODO: we want to get with user_id param
   const getBookings = () => {
-    const link = 'https://59bb-72-142-18-42.ngrok-free.app'
-    fetch(`${link}'/bookings/'`,{
+    const link = proxy
+    const userId = 1
+    fetch(`${link}/bookings`,{
         method: 'GET',
         headers: {
             'Content-Type': 'application/json'
@@ -53,13 +56,22 @@ const Upcoming = () => {
     })
     .then(response  => {return response.json()})
     .then(data => {
-      setBookings(data)
+      const parsedData = [];
+      for (let i in data) {
+        const date = getDate(data[i].start_time)
+        const startTime = getTime(data[i].start_time)
+        const endTime =  getTime(data[i].end_time)
+
+        parsedData.push({date, startTime, endTime})
+      }
+      setBookings(parsedData)
+      console.log(data)
     })
   }
 
-  // useEffect(() => {
-  //   getBookings()
-  // }, [])
+  useEffect(() => {
+    getBookings()
+  }, [])
 
   return (
       <Container component="main" maxWidth="sm">
