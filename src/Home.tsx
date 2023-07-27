@@ -35,13 +35,6 @@ const Home = () => {
   const [keypadCode, setKeypadCode] = useState()
 
   const navigate = useNavigate(); 
-  useEffect(() => {
-    if (sessionStorage.getItem("userId") === null) {
-      let path = `/login`; 
-      navigate(path);
-    }
-  })
-
   const getHomePageData = () => {
     const link = proxy
     // TODO: Change this hardcoded userId
@@ -90,7 +83,12 @@ const Home = () => {
   }
 
   useEffect(() => {
-    getHomePageData()
+    if (sessionStorage.getItem("userId") === null) {
+      let path = `/login`; 
+      navigate(path);
+    } else {
+      getHomePageData()
+    }
   }, [])
 
   return (
