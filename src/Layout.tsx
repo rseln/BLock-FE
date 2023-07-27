@@ -49,7 +49,7 @@ export default function ButtonAppBar({ isLogged, setIsLogged, setOpen, open, ...
             <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
               B - Lock
             </Typography>
-            {(location.pathname !== "/login" && location.pathname !== "/register") && <Button color="inherit" onClick={handleLoginState} >{"Logout"}</Button> }
+            {(location.pathname !== "/login" && location.pathname !== "/register") && <Button color="inherit" onClick={logOut} >{"Logout"}</Button> }
           </Toolbar>
         </AppBar>
       </Box>

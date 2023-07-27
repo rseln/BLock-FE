@@ -14,6 +14,7 @@ import {
 } from "@mui/material";
 import { proxy } from './util/constants';
 import { getDate, getTime } from './util/timeUtils';
+import { useNavigate } from "react-router-dom";
 
 
 interface IBooking {
@@ -44,6 +45,13 @@ const mockBookings: IBooking[] = [
 const Upcoming = () => {
   const [bookings, setBookings] = useState([])
 
+  const navigate = useNavigate(); 
+  useEffect(() => {
+    if (sessionStorage.getItem("userId") === null) {
+      let path = `/login`; 
+      navigate(path);
+    }
+  })
   // TODO: we want to get with user_id param
   const getBookings = () => {
     const link = proxy

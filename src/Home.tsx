@@ -10,6 +10,7 @@ import Grid from '@mui/material/Grid';
 import Container from '@mui/material/Container';
 import CssBaseline from '@mui/material/CssBaseline';
 import { proxy } from './util/constants';
+import { useNavigate } from "react-router-dom";
 
 const estimateTime = () => {
   const today = new Date() 
@@ -30,9 +31,13 @@ const Home = () => {
   const [token, setToken] = useState()
   const [bookings, setBookings] = useState([])
 
-  if(false){
-    {return <SignIn setToken={setToken}/>}
-  }
+  const navigate = useNavigate(); 
+  useEffect(() => {
+    if (sessionStorage.getItem("userId") === null) {
+      let path = `/login`; 
+      navigate(path);
+    }
+  })
 
   // TODO: we want to get with user_id param
   const getBookings = () => {

@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React, {useEffect} from 'react';
 import Button from '@mui/material/Button';
 import CssBaseline from '@mui/material/CssBaseline';
 import Box from '@mui/material/Box';
@@ -14,6 +14,7 @@ import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { TimePicker } from '@mui/x-date-pickers/TimePicker';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import { proxy } from './util/constants';
+import { useNavigate } from "react-router-dom";
 
 
 async function submitLockBooking(credentials) {
@@ -35,6 +36,14 @@ async function submitLockBooking(credentials) {
 }
 
 const Booking = () => {
+  const navigate = useNavigate(); 
+  useEffect(() => {
+    console.log(sessionStorage.getItem("userId"))
+    if (sessionStorage.getItem("userId") === null) {
+      let path = `/login`; 
+      navigate(path);
+    }
+  })
   var now = dayjs()
   const [deviceID, setDeviceID] = React.useState<Number>(0);
   const [startTime, setStartTime] = React.useState<Dayjs>(now);
