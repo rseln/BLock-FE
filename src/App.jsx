@@ -3,7 +3,6 @@ import { Box, ThemeProvider, createTheme } from "@mui/material/styles";
 import CssBaseline from "@mui/material/CssBaseline";
 import Home from "./Home";
 import SignIn from "./SignIn";
-import Login from "./Login";
 import Register from "./Register";
 import Bookings from "./Bookings";
 import Booking from "./Booking";
@@ -11,8 +10,7 @@ import Layout from "./Layout";
 import Upcoming from "./Upcoming";
 import Welcome from "./Welcome";
 import { useOnClickOutside } from './util/hooks';
-import React, { useEffect, useState, useRef } from "react";
-import Burger from "./components/Burger"
+import React, { useState, useRef } from "react";
 import Menu from "./components/Menu"
 
 const theme = createTheme({

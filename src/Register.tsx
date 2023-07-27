@@ -1,4 +1,5 @@
-import * as React from 'react';
+// import * as React from 'react';
+import React, {useState, useEffect} from 'react'
 import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
 import CssBaseline from '@mui/material/CssBaseline';
@@ -9,8 +10,9 @@ import Box from '@mui/material/Box';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
+import { useNavigate } from "react-router-dom";
 
-const link = ' https://59bb-72-142-18-42.ngrok-free.app'
+const link = 'http://localhost:8080'
 
 async function RegisterUser(credentials) {
   const test = {
@@ -19,9 +21,10 @@ async function RegisterUser(credentials) {
     "email": 'rosedawg@uwaterloo.ca',
     "password": 'password',
     "daily_credits_available": 120,
-    "watiam": null
-}
-  console.log(credentials)
+    "watiam": "kys"
+  }
+  sessionStorage.setItem("credentials", JSON.stringify(test));
+  console.log(JSON.stringify(test), sessionStorage.getItem("credentials"))
   let headers = new Headers();
 
   headers.append('Content-Type', 'application/json');
@@ -29,13 +32,12 @@ async function RegisterUser(credentials) {
   headers.append('Authorization', 'Basic ');
   headers.append('Origin','http://localhost:3000');
 
-    return fetch(`${link}/users/create`,{
+    return fetch(`${link}/auth/signup/`,{
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'
         },
         // body: JSON.stringify(credentials),
-        // mode: 'no-cors',
         body: JSON.stringify(test)
       })
       // .then(data => data.json())
@@ -54,30 +56,35 @@ async function getUser() {
       .then(data => console.log("DATA", data.json()))
 }
 
+export default function SignUp() {
+  const DAILY_CREDS = 120
+  const [firstName, setFirstName] = React.useState<string | undefined>()
+  const [lastName, setLastName] = React.useState<string | undefined>()
+  const [email, setEmail] = React.useState<string | undefined>()
+  const [password, setPassword] = React.useState<string | undefined>()
+  const [watIAM, setWatIAM] = React.useState<string | undefined>()
 
-
-export default function SignUp({setToken}) {
-    const DAILY_CREDS = 120
-    const [firstName, setFirstName] = React.useState<string | undefined>()
-    const [lastName, setLastName] = React.useState<string | undefined>()
-    const [email, setEmail] = React.useState<string | undefined>()
-    const [password, setPassword] = React.useState<string | undefined>()
-    const [watIAM, setWatIAM] = React.useState<string | undefined>()
-
+  // useEffect(() => {
+  //   // getBookings()
+  // }, [])
+  const navigate = useNavigate(); 
     
-    const handleSubmit = async (e) => {
-        e.preventDefault()
-        // const token = await RegisterUser({
-        //   firstName,
-        //   lastName,
-        //   email,
-        //   password,
-        //   DAILY_CREDS,
-        //   watIAM,
-        // })
-        // console.log("TOKEN", token)
-        await getUser()
+  const handleSubmit = async (e) => {
+    e.preventDefault()
+    const token = await RegisterUser({
+      firstName,
+      lastName,
+      email,
+      password,
+      DAILY_CREDS,
+      watIAM,
+    })
+
+    if(token.status === 200){
+      navigate(`/`);
     }
+    // await getUser()
+  }
 
   return (
       <Container component="main" maxWidth="sm">

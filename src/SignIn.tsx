@@ -11,6 +11,7 @@ import Box from '@mui/material/Box';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
+import { useNavigate } from "react-router-dom";
 
 async function LoginUser(credentials) {
     return fetch('http://localhost:8080/login',{
@@ -30,7 +31,8 @@ async function LoginUser(credentials) {
 const SignIn = ({setToken}) => {
   const [email, setEmail] = React.useState<string | undefined>()
   const [password, setPassword] = React.useState<string | undefined>()
-  
+  const navigate = useNavigate(); 
+
   const handleSubmit = async (e) => {
       e.preventDefault()
       const token = await LoginUser({
@@ -38,6 +40,10 @@ const SignIn = ({setToken}) => {
           password
       })
       setToken(token)
+      
+      if(token.status === 200){
+        navigate(`/`);
+      }
   }
 
   return (
