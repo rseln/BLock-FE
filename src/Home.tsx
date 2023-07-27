@@ -45,7 +45,7 @@ const Home = () => {
   const getHomePageData = () => {
     const link = proxy
     // TODO: Change this hardcoded userId
-    const userId = 1
+    const userId = sessionStorage.getItem("userId")
     fetch(`${link}/bookings?user_id=${userId}`,{
         method: 'GET',
         headers: {

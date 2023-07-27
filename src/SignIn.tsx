@@ -17,7 +17,7 @@ import { proxy } from './util/constants';
 
 async function LoginUser(credentials) {
   const link = proxy
-    return fetch(link,{
+    return fetch(`${link}/users/login`,{
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'
