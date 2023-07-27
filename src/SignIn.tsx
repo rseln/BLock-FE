@@ -40,7 +40,6 @@ const SignIn = ({setToken}) => {
           email,
           password
       })
-      console.log(userId)
       if(userId.length > 0){
         sessionStorage.setItem("userId", userId[0]["user_id"])
         navigate(`/`);
@@ -104,11 +103,6 @@ const SignIn = ({setToken}) => {
               Sign In
             </Button>
             <Grid container>
-              <Grid item xs>
-                <Link href="#" variant="body2">
-                  Forgot password?
-                </Link>
-              </Grid>
               <Grid item>
                 <Link href="/register" variant="body2">
                   {"Don't have an account? Sign Up"}

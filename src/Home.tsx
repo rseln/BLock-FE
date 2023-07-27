@@ -11,6 +11,7 @@ import Container from '@mui/material/Container';
 import CssBaseline from '@mui/material/CssBaseline';
 import { proxy } from './util/constants';
 import { getTime } from './util/timeUtils';
+import { useNavigate } from "react-router-dom";
 
 const today = new Date()
 
@@ -33,9 +34,13 @@ const Home = () => {
   const [bookings, setBookings] = useState([])
   const [keypadCode, setKeypadCode] = useState()
 
-  if(false){
-    {return <SignIn setToken={setToken}/>}
-  }
+  const navigate = useNavigate(); 
+  useEffect(() => {
+    if (sessionStorage.getItem("userId") === null) {
+      let path = `/login`; 
+      navigate(path);
+    }
+  })
 
   const getHomePageData = () => {
     const link = proxy

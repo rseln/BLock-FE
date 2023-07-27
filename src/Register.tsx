@@ -24,7 +24,6 @@ async function RegisterUser(credentials) {
     "watiam": "kys"
   }
   sessionStorage.setItem("credentials", JSON.stringify(test));
-  console.log(JSON.stringify(test), sessionStorage.getItem("credentials"))
   let headers = new Headers();
 
   headers.append('Content-Type', 'application/json');
