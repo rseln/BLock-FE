@@ -10,10 +10,12 @@ import Grid from '@mui/material/Grid';
 import Container from '@mui/material/Container';
 import CssBaseline from '@mui/material/CssBaseline';
 import { proxy } from './util/constants';
+import { getTime } from './util/timeUtils';
 import { useNavigate } from "react-router-dom";
 
+const today = new Date()
+
 const estimateTime = () => {
-  const today = new Date() 
   const curHour = today.getHours()
 
   if (5 < curHour && curHour < 12) {
@@ -30,6 +32,7 @@ const estimateTime = () => {
 const Home = () => {
   const [token, setToken] = useState()
   const [bookings, setBookings] = useState([])
+  const [keypadCode, setKeypadCode] = useState()
 
   const navigate = useNavigate(); 
   useEffect(() => {
@@ -39,10 +42,11 @@ const Home = () => {
     }
   })
 
-  // TODO: we want to get with user_id param
-  const getBookings = () => {
+  const getHomePageData = () => {
     const link = proxy
-    fetch(`${link}'/bookings/'`,{
+    // TODO: Change this hardcoded userId
+    const userId = 1
+    fetch(`${link}/bookings?user_id=${userId}`,{
         method: 'GET',
         headers: {
             'Content-Type': 'application/json'
@@ -50,19 +54,50 @@ const Home = () => {
     })
     .then(response  => {return response.json()})
     .then(data => {
-      setBookings(data)
+      const parsedData = []
+      for (let i in data) {
+        const start = data[i].start_time
+        const end = data[i].end_time
+        
+        if (new Date(start) <= today && new Date(end) >= today) {
+          const deviceId = data[i].device_id
+          getKeypadCode(deviceId)
+
+          const startTime = getTime(start)
+          const endTime =  getTime(end)
+          const timeFrame = `${startTime} to ${endTime}`
+
+          parsedData.push({deviceId, timeFrame})
+        }  
+      }
+      setBookings(parsedData)
+      console.log(data)
     })
   }
 
-  // useEffect(() => {
-  //   getBookings()
-  // }, [])
+  const getKeypadCode = (deviceId) => {
+    const link = proxy
+    fetch(`${link}/devices?device_id=${deviceId}`,{
+        method: 'GET',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+    })
+    .then(response  => {return response.json()})
+    .then(data => {
+      setKeypadCode(data[0].keypad_code)
+    })
+  }
+
+  useEffect(() => {
+    getHomePageData()
+  }, [])
 
   return (
     <Container component="main" maxWidth="sm">
       <Box
         sx={{
-          marginTop: 20,
+          marginTop: 5,
           display: 'flex',
           flexDirection: 'column',
           alignItems: 'left',
@@ -78,8 +113,8 @@ const Home = () => {
           :
           // NOT SURE WHAT THE DATA LOOKS LIKE SO HERES SOME SCUFFED CODE:
           (<>
-          <BookingDetail text="Locker Number" value={bookings[0].lockNum}></BookingDetail>
-          <BookingDetail text="Key" value={bookings[0].password}></BookingDetail>
+          <BookingDetail text="Locker Number" value={bookings[0].deviceId}></BookingDetail>
+          <BookingDetail text="Keypad Code" value={keypadCode}></BookingDetail>
           <BookingDetail text="Booking Time Frame" value={bookings[0].timeFrame}></BookingDetail>
           </>)
         }
