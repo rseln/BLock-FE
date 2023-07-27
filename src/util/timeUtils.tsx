@@ -6,6 +6,8 @@ export const getDate = (timestamp) => {
 }
 
 export const getTime = (timestamp) => {
+    console.log(timestamp)
     const time = timestamp.split('T')[1].substring(0, 5)
-    return moment(time, 'HH:mm').format('h:mm a'); 
+    console.log(time)
+    return moment(time, 'HH:mm').utcOffset("-08:00").format('h:mm a'); 
 }

@@ -36,7 +36,7 @@ export default function ButtonAppBar({ isLogged, setIsLogged, setOpen, open, ...
       <Box sx={{ flexGrow: 1 }}>
         <AppBar position="static">
           <Toolbar>
-            <IconButton
+            {(location.pathname !== "/login" && location.pathname !== "/register") && <IconButton
                 size="large"
                 edge="start"
                 color="inherit"
@@ -45,7 +45,7 @@ export default function ButtonAppBar({ isLogged, setIsLogged, setOpen, open, ...
                 onClick={() => setOpen(!open)}
             >
               <MenuIcon />
-            </IconButton>
+            </IconButton>}
             <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
               B - Lock
             </Typography>
