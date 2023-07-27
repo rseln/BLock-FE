@@ -18,7 +18,6 @@ import { useNavigate } from "react-router-dom";
 
 
 async function submitLockBooking(credentials) {
-  console.log(JSON.stringify(credentials))
   const link = proxy
   const bookingId = await fetch(`${link}/bookings/create`,{
       method: 'POST',
@@ -38,7 +37,6 @@ async function submitLockBooking(credentials) {
 const Booking = () => {
   const navigate = useNavigate(); 
   useEffect(() => {
-    console.log(sessionStorage.getItem("userId"))
     if (sessionStorage.getItem("userId") === null) {
       let path = `/login`; 
       navigate(path);
@@ -61,7 +59,6 @@ const Booking = () => {
         start_time,
         end_time
     })
-    console.log(token)
     // setToken(token) what does this do?
   }
 

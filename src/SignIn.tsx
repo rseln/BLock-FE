@@ -40,7 +40,6 @@ const SignIn = ({setToken}) => {
           email,
           password
       })
-      console.log(userId)
       if(userId.length > 0){
         sessionStorage.setItem("userId", userId[0]["user_id"])
         navigate(`/`);
