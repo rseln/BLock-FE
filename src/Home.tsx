@@ -9,6 +9,7 @@ import Box from '@mui/material/Box';
 import Grid from '@mui/material/Grid';
 import Container from '@mui/material/Container';
 import CssBaseline from '@mui/material/CssBaseline';
+import { proxy } from './util/constants';
 
 const estimateTime = () => {
   const today = new Date() 
@@ -35,7 +36,7 @@ const Home = () => {
 
   // TODO: we want to get with user_id param
   const getBookings = () => {
-    const link = 'https://59bb-72-142-18-42.ngrok-free.app'
+    const link = proxy
     fetch(`${link}'/bookings/'`,{
         method: 'GET',
         headers: {

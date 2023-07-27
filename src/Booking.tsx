@@ -13,11 +13,12 @@ import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { TimePicker } from '@mui/x-date-pickers/TimePicker';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
+import { proxy } from './util/constants';
 
 
 async function submitLockBooking(credentials) {
   console.log(JSON.stringify(credentials))
-  const link = 'https://59bb-72-142-18-42.ngrok-free.app'
+  const link = proxy
   return fetch(`${link}'/bookings/create'`,{
       method: 'POST',
       headers: {
