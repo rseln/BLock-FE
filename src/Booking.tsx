@@ -15,36 +15,16 @@ import { TimePicker } from '@mui/x-date-pickers/TimePicker';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import { proxy } from './util/constants';
 import { useNavigate, useLocation } from "react-router-dom";
+import { useAuth0 } from '@auth0/auth0-react';
 
-
-async function submitLockBooking(credentials) {
-  const link = proxy
-  const bookingId = await fetch(`${link}/bookings/create`,{
-      method: 'POST',
-      headers: {
-          'Content-Type': 'application/json'
-      },
-      body: JSON.stringify(credentials)
-  })
-  .then((res) => {
-    return res.json()})
-  .catch((error) => {
-    return error
-  })
-  return bookingId
-}
-
-const Booking = () => {
+  // NOTES:
+  // - Retrieve devices from API and only show the ones that are available for use.
+const Booking: React.FC = () => {
+  const { user, getAccessTokenSilently } = useAuth0();
   const {state} = useLocation();
   console.log("state", state)
   
   const navigate = useNavigate(); 
-  useEffect(() => {
-    if (sessionStorage.getItem("userId") === null) {
-      let path = `/login`; 
-      navigate(path);
-    }
-  })
   var now = dayjs()
   const [deviceID, setDeviceID] = React.useState<Number>(0);
   const [startTime, setStartTime] = React.useState<Dayjs>(now);
@@ -61,22 +41,46 @@ const Booking = () => {
       setDate(dayjs(state.end_time))
     }
   }, [])
-    
+
+  const getDevices = async () =>{
+    const link = proxy
+    const token = await getAccessTokenSilently();
+    await fetch(`${link}/bookings/create`,{
+      method: 'GET',
+      headers: {
+          'Content-Type': 'application/json',
+          authorization: `Bearer ${token}`
+      }
+    })
+  }
+
   const handleSubmit = async (e) => {
     e.preventDefault()
     let dateString = date.format('YYYY-MM-DD')
     let start_time = dateString + " " + startTime.format('HH:mm:ss')
     let end_time = dateString + " " + endTime.format('HH:mm:ss')
-    const token = await submitLockBooking({
-        device_id: deviceID,
-        user_id: sessionStorage.getItem("userId"),
-        start_time,
-        end_time
+    const token = await getAccessTokenSilently();
+    const link = proxy
+    await fetch(`${link}/bookings/create`,{
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            authorization: `Bearer ${token}`
+        },
+        body: JSON.stringify({
+          device_id: deviceID,
+          user_id: user.sub,
+          start_time,
+          end_time
+        })
     })
-    navigate(`/`);
-    // setToken(token) what does this do?
+    .then((res) => {
+      return res.json()})
+    .catch((error) => {
+      return error
+    })
+    navigate(`/home`);
   }
-
   return (
       <Container component="main" maxWidth="sm">
         <CssBaseline />
@@ -139,7 +143,7 @@ const Booking = () => {
                 label="Select a lock"
                 onChange={(e) => setDeviceID(Number(e.target.value))}
               >
-                <MenuItem value={0}>No Selection</MenuItem>
+                <MenuItem value={0}>No Selection</MenuItem> 
                 <MenuItem value={1}>Lock 1</MenuItem>
                 <MenuItem value={2}>Lock 2</MenuItem>
                 <MenuItem value={3}>Lock 3</MenuItem>
@@ -150,7 +154,7 @@ const Booking = () => {
                 type="submit"
                 fullWidth
                 variant="outlined"
-                href="/"
+                href="/home"
               >
                 Cancel
               </Button>
@@ -168,4 +172,4 @@ const Booking = () => {
   );
 }
 
-export default Booking
+export default Booking;

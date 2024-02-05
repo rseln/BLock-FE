@@ -1,6 +1,5 @@
 import React, {useState, useEffect} from 'react'
 // import Login from "./Login";
-import SignIn from "./SignIn";
 import BookingDetail from './components/BookingDetail';
 import { Typography } from '@mui/material';
 import Paper from '@mui/material/Paper';
@@ -12,41 +11,58 @@ import CssBaseline from '@mui/material/CssBaseline';
 import { proxy } from './util/constants';
 import { getTime } from './util/timeUtils';
 import { useNavigate } from "react-router-dom";
-
-const today = new Date()
-
-const estimateTime = () => {
-  const curHour = today.getHours()
-
-  if (5 < curHour && curHour < 12) {
-    return "Good Morning!🌅"
-  } else if (12 <= curHour && curHour < 17) {
-    return "Good Afternoon!☀️"
-  } else if (17 <= curHour && curHour < 21){
-    return "Good Evening!🌇"
-  } else {
-    return "Good Night!🌃"
-  }
-}
+import { useAuth0 } from '@auth0/auth0-react';
 
 const Home = () => {
-  const [token, setToken] = useState()
+  const {user, getAccessTokenSilently } = useAuth0();
+  const today = new Date()
+
+  const estimateTime = () => {
+    const curHour = today.getHours()
+
+    if (5 < curHour && curHour < 12) {
+      return "Good Morning!🌅"
+    } else if (12 <= curHour && curHour < 17) {
+      return "Good Afternoon!☀️"
+    } else if (17 <= curHour && curHour < 21){
+      return "Good Evening!🌇"
+    } else {
+      return "Good Night!🌃"
+    }
+  }
   const [bookings, setBookings] = useState([])
   const [keypadCode, setKeypadCode] = useState()
 
-  const navigate = useNavigate(); 
-  const getHomePageData = () => {
+  const getKeypadCode = async (deviceId) => {
     const link = proxy
-    // TODO: Change this hardcoded userId
-    const userId = sessionStorage.getItem("userId")
-    fetch(`${link}/bookings?user_id=${userId}`,{
+    const token = await getAccessTokenSilently();
+    fetch(`${link}/devices?device_id=${encodeURIComponent(deviceId)}`,{
         method: 'GET',
         headers: {
-            'Content-Type': 'application/json'
+            'Content-Type': 'application/json',
+            authorization: `Bearer ${token}`
         },
     })
     .then(response  => {return response.json()})
     .then(data => {
+      setKeypadCode(data[0].keypad_code)
+    })
+  }
+
+  const getHomePageData = async () => {
+    const link = proxy
+    // TODO: Change this hardcoded userId
+    const token = await getAccessTokenSilently();
+    fetch(`${link}/bookings?user_id=${encodeURIComponent(user.sub)}`,{
+        method: 'GET',
+        headers: {
+            'Content-Type': 'application/json',
+            authorization: `Bearer ${token}`
+        },
+    })
+    .then(response  => {return response.json()})
+    .then(async data => {
+      console.log("HELLO", data)
       const parsedData = []
       for (let i in data) {
         const start = data[i].start_time
@@ -54,7 +70,7 @@ const Home = () => {
         
         if (new Date(start) <= today && new Date(end) >= today) {
           const deviceId = data[i].device_id
-          getKeypadCode(deviceId)
+          await getKeypadCode(deviceId)
 
           const startTime = getTime(start)
           const endTime =  getTime(end)
@@ -67,29 +83,10 @@ const Home = () => {
       console.log(data)
     })
   }
-
-  const getKeypadCode = (deviceId) => {
-    const link = proxy
-    fetch(`${link}/devices?device_id=${deviceId}`,{
-        method: 'GET',
-        headers: {
-            'Content-Type': 'application/json'
-        },
-    })
-    .then(response  => {return response.json()})
-    .then(data => {
-      setKeypadCode(data[0].keypad_code)
-    })
-  }
-
-  useEffect(() => {
-    if (sessionStorage.getItem("userId") === null) {
-      let path = `/login`; 
-      navigate(path);
-    } else {
-      getHomePageData()
-    }
-  }, [])
+  
+  useEffect(()=>{
+    getHomePageData();
+  },[])
 
   return (
     <Container component="main" maxWidth="sm">
@@ -125,4 +122,4 @@ const Home = () => {
   )
 }
 
-export default Home
+export default Home;
