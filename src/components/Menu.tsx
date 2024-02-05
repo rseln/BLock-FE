@@ -4,7 +4,7 @@ import { StyledMenu } from './MenuStyled';
 import CloseIcon from '@mui/icons-material/Close';
 import IconButton from '@mui/material/IconButton';
 
-const Menu = ({ open, setOpen, setIsLogged, ...props }) => {
+const Menu = ({ open, setOpen, ...props }) => {
   
   const isHidden = open ? true : false;
   const tabIndex = isHidden ? 0 : -1;
@@ -20,7 +20,7 @@ const Menu = ({ open, setOpen, setIsLogged, ...props }) => {
       >
         <CloseIcon />
       </IconButton>
-      <a href="/" tabIndex={tabIndex}>
+      <a href="/home" tabIndex={tabIndex}>
         <span aria-hidden="true">🏠</span>
         Home Page
       </a>
@@ -32,7 +32,7 @@ const Menu = ({ open, setOpen, setIsLogged, ...props }) => {
         <span aria-hidden="true">💸</span>
         Book Here
         </a>
-      <a href="/welcome" tabIndex={tabIndex} onClick={setIsLogged(false)} >
+      <a href="/welcome" tabIndex={tabIndex}>
         <span aria-hidden="true">📩</span>
         Logout
         </a>

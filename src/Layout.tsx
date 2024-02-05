@@ -7,36 +7,28 @@ import IconButton from '@mui/material/IconButton';
 import MenuIcon from '@mui/icons-material/Menu';
 import { Container, CssBaseline } from '@mui/material';
 import { useLocation, useNavigate } from "react-router-dom";
+import { useAuth0 } from '@auth0/auth0-react';
 
 
-export default function ButtonAppBar({ isLogged, setIsLogged, setOpen, open, ...props }) {
+export default function ButtonAppBar({setOpen, open, ...props }) {
   const navigate = useNavigate(); 
-  const location = useLocation();
-  
-  if(location.pathname === "/login" || location.pathname === "/register" || location.pathname === "/welcome"){
-    setIsLogged(false)
-  }
 
-  const handleLoginState = () => {
-    if (isLogged) {
-      setIsLogged(false)
-      let path = `/login`; 
-      navigate(path);
-    } else {
-      let path = `/login`; 
-      navigate(path);
-    }
+  const { logout, isAuthenticated } = useAuth0();
+
+  const handleLogout = () => {
+    logout({
+      logoutParams: {
+        returnTo: window.location.origin,
+      }
+    })
   }
-  const logOut = () =>{
-    sessionStorage.clear()
-    navigate(`/`)
-  }
+  
   return (
     <div>
       <Box sx={{ flexGrow: 1 }}>
         <AppBar position="static">
           <Toolbar>
-            {(location.pathname !== "/login" && location.pathname !== "/register") && <IconButton
+            {isAuthenticated && <IconButton
                 size="large"
                 edge="start"
                 color="inherit"
@@ -49,7 +41,7 @@ export default function ButtonAppBar({ isLogged, setIsLogged, setOpen, open, ...
             <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
               B - Lock
             </Typography>
-            {(location.pathname !== "/login" && location.pathname !== "/register") && <Button color="inherit" onClick={logOut} >{"Logout"}</Button> }
+            {isAuthenticated && <Button color="inherit" onClick={handleLogout} >{"Logout"}</Button> }
           </Toolbar>
         </AppBar>
       </Box>

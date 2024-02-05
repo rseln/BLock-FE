@@ -15,6 +15,7 @@ import {
 import { proxy } from './util/constants';
 import { getDate, getTime } from './util/timeUtils';
 import { useNavigate } from "react-router-dom";
+import { useAuth0 } from '@auth0/auth0-react';
 
 
 interface IBooking {
@@ -24,25 +25,8 @@ interface IBooking {
   // lock: number
 }
 
-const mockBookings: IBooking[] = [
-  { 
-    date: "Wednesday, July 19, 2023", 
-    startTime: "10:00 am",
-    endTime: "11:00 am"
-  },
-  {
-    date: "Thursday, July 20, 2023", 
-    startTime: "5:30 pm",
-    endTime: "7:00 pm"
-  },
-  {
-    date: "Sunday, July 23, 2023",
-    startTime: "7:30 pm",
-    endTime: "9:00 pm"
-  },
-];
-
 const Upcoming = () => {  
+  const {user, getAccessTokenSilently} = useAuth0()
   const [bookings, setBookings] = useState([])
   const [this_start, setStart] = useState()
   const [this_end, setEnd] = useState()
@@ -54,25 +38,21 @@ const Upcoming = () => {
   // const [bookings, setBookings] = useState(mockBookings)
 
   const navigate = useNavigate(); 
-  useEffect(() => {
-    if (sessionStorage.getItem("userId") === null) {
-      let path = `/login`; 
-      navigate(path);
-    }
-  })
   // TODO: we want to get with user_id param
-  const getBookings = () => {
+  const getBookings = async () => {
     const link = proxy
-    const userId = sessionStorage.getItem("userId")
-    console.log(userId)
-    fetch(`${link}/bookings?user_id=${userId}`,{
+    const token = await getAccessTokenSilently()
+    console.log(encodeURIComponent(user.sub))
+    fetch(`${link}/bookings?user_id=${encodeURIComponent(user.sub)}`,{
         method: 'GET',
         headers: {
-            'Content-Type': 'application/json'
+            'Content-Type': 'application/json',
+            authorization: `Bearer ${token}`
         },
     })
     .then(response  => {return response.json()})
     .then(data => {
+      console.log(data)
       const parsedData = [];
       for (let i in data) {
         const date = getDate(data[i].start_time)
