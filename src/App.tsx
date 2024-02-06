@@ -60,7 +60,7 @@ function App() {
         domain={process.env.REACT_APP_AUTH0_DOMAIN}
         clientId={process.env.REACT_APP_AUTH0_CLIENT_ID}
         authorizationParams={{
-            redirect_uri: window.location.href + "/home",
+            redirect_uri: window.location.href + "home",
             audience: process.env.REACT_APP_AUTH0_AUDIENCE_ID,
             scope: "read:current_user update:current_user_metadata" //currently useless
           }}>
