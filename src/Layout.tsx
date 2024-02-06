@@ -18,7 +18,7 @@ export default function ButtonAppBar({setOpen, open, ...props }) {
   const handleLogout = () => {
     logout({
       logoutParams: {
-        returnTo: window.location.origin + "BLock-FE",
+        returnTo: window.location.origin + "/BLock-FE",
       }
     })
   }
