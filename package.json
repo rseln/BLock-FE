@@ -22,6 +22,7 @@
   },
   "homepage": "https://github.com/rseln/BLock-FE#readme",
   "devDependencies": {
+    "@auth0/auth0-react": "^2.2.4",
     "@babel/core": "^7.22.8",
     "@babel/preset-env": "^7.22.7",
     "@babel/preset-react": "^7.22.5",
@@ -42,7 +43,6 @@
     "webpack-dev-server": "^4.15.1"
   },
   "dependencies": {
-    "@auth0/auth0-react": "^2.2.4",
     "@emotion/react": "^11.11.1",
     "@emotion/styled": "^11.11.0",
     "@fontsource/roboto": "^5.0.5",

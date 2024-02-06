@@ -6,7 +6,7 @@ module.exports = {
   entry: "./src/index.tsx",
   output: {
     filename: "main.js",
-    path: path.resolve(__dirname, "build"),
+    path: path.resolve(__dirname, "docs"),
   },
   plugins: [
     new Dotenv(),
@@ -16,7 +16,7 @@ module.exports = {
   ],
   devServer: {
     static: {
-      directory: path.join(__dirname, "build"),
+      directory: path.join(__dirname, "docs"),
     },
     port: 3000,
     historyApiFallback: true,
