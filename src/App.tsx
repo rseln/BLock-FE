@@ -1,4 +1,4 @@
-import { BrowserRouter, Route, Routes, useNavigate } from "react-router-dom";
+import { HashRouter, Route, Routes, useNavigate } from "react-router-dom";
 import { ThemeProvider, createTheme } from "@mui/material/styles";
 import CssBaseline from "@mui/material/CssBaseline";
 import Home from "./Home";
@@ -11,6 +11,7 @@ import React, { useState, useRef, useEffect } from "react";
 import Menu from "./components/Menu";
 import { Auth0Provider, useAuth0, withAuthenticationRequired } from "@auth0/auth0-react";
 
+const routerBaseName = process.env.PUBLIC_URL;
 const theme = createTheme({
   palette: {
     background: {
@@ -55,12 +56,12 @@ function App() {
   const node = useRef();
   useOnClickOutside(node, () => setOpen(false));
   return (
-    <BrowserRouter>
+    <HashRouter>
       <Auth0ProviderWithRedirectCallback
         domain={process.env.REACT_APP_AUTH0_DOMAIN}
         clientId={process.env.REACT_APP_AUTH0_CLIENT_ID}
         authorizationParams={{
-            redirect_uri: "https://rseln.github.com/BLock-FE/home",
+            redirect_uri: routerBaseName + "/home",
             audience: process.env.REACT_APP_AUTH0_AUDIENCE_ID,
             scope: "read:current_user update:current_user_metadata" //currently useless
           }}>
@@ -82,7 +83,7 @@ function App() {
           </Layout>
         </ThemeProvider>
       </Auth0ProviderWithRedirectCallback>
-    </BrowserRouter>
+    </HashRouter>
   );
 }
 
