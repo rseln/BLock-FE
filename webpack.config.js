@@ -11,7 +11,7 @@ module.exports = {
   plugins: [
     new Dotenv(),
     new HtmlWebpackPlugin({
-      template: path.join(__dirname, "public", "index.html"),
+      template: path.join(__dirname, "docs", "index.html"),
     }),
   ],
   devServer: {
