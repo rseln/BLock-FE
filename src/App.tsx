@@ -11,7 +11,6 @@ import React, { useState, useRef, useEffect } from "react";
 import Menu from "./components/Menu";
 import { Auth0Provider, useAuth0, withAuthenticationRequired } from "@auth0/auth0-react";
 
-const routerBaseName = process.env.PUBLIC_URL;
 const theme = createTheme({
   palette: {
     background: {
@@ -61,7 +60,7 @@ function App() {
         domain={process.env.REACT_APP_AUTH0_DOMAIN}
         clientId={process.env.REACT_APP_AUTH0_CLIENT_ID}
         authorizationParams={{
-            redirect_uri: routerBaseName + "/home",
+            redirect_uri: window.location.href + "/home",
             audience: process.env.REACT_APP_AUTH0_AUDIENCE_ID,
             scope: "read:current_user update:current_user_metadata" //currently useless
           }}>
