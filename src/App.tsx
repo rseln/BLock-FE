@@ -1,4 +1,4 @@
-import { BrowserRouter, Route, Routes, useNavigate } from "react-router-dom";
+import { HashRouter, Route, Routes, useNavigate } from "react-router-dom";
 import { ThemeProvider, createTheme } from "@mui/material/styles";
 import CssBaseline from "@mui/material/CssBaseline";
 import Home from "./Home";
@@ -55,7 +55,7 @@ function App() {
   const node = useRef();
   useOnClickOutside(node, () => setOpen(false));
   return (
-    <BrowserRouter>
+    <HashRouter>
       <Auth0ProviderWithRedirectCallback
         domain={process.env.REACT_APP_AUTH0_DOMAIN}
         clientId={process.env.REACT_APP_AUTH0_CLIENT_ID}
@@ -82,7 +82,7 @@ function App() {
           </Layout>
         </ThemeProvider>
       </Auth0ProviderWithRedirectCallback>
-    </BrowserRouter>
+    </HashRouter>
   );
 }
 
