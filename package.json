@@ -20,7 +20,7 @@
   "bugs": {
     "url": "https://github.com/rseln/BLock-FE/issues"
   },
-  "homepage": "https://github.com/rseln/BLock-FE#readme",
+  "homepage": "https://rseln.github.com/BLock-FE",
   "devDependencies": {
     "@auth0/auth0-react": "^2.2.4",
     "@babel/core": "^7.22.8",
