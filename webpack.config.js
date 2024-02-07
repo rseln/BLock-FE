@@ -6,19 +6,19 @@ module.exports = {
   entry: "./src/index.tsx",
   output: {
     filename: "main.js",
-    path: path.resolve(__dirname, "docs"),
+    path: path.resolve(__dirname, "build"),
   },
   plugins: [
     new Dotenv({
       systemvars: true
     }),
     new HtmlWebpackPlugin({
-      template: path.join(__dirname, "docs", "index.html"),
+      template: path.join(__dirname, "public", "index.html"),
     }),
   ],
   devServer: {
     static: {
-      directory: path.join(__dirname, "docs"),
+      directory: path.join(__dirname, "build"),
     },
     port: 3000,
     historyApiFallback: true,
