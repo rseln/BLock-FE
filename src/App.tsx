@@ -1,4 +1,4 @@
-import { HashRouter, Route, Routes, useNavigate } from "react-router-dom";
+import { BrowserRouter, Route, Routes, useNavigate } from "react-router-dom";
 import { ThemeProvider, createTheme } from "@mui/material/styles";
 import CssBaseline from "@mui/material/CssBaseline";
 import Home from "./Home";
@@ -55,12 +55,12 @@ function App() {
   const node = useRef();
   useOnClickOutside(node, () => setOpen(false));
   return (
-    <HashRouter>
+    <BrowserRouter>
       <Auth0ProviderWithRedirectCallback
         domain={process.env.REACT_APP_AUTH0_DOMAIN}
         clientId={process.env.REACT_APP_AUTH0_CLIENT_ID}
         authorizationParams={{
-            redirect_uri: window.location.href + "home",
+            redirect_uri: window.location.origin + "/home",
             audience: process.env.REACT_APP_AUTH0_AUDIENCE_ID,
             scope: "read:current_user update:current_user_metadata" //currently useless
           }}>
@@ -82,7 +82,7 @@ function App() {
           </Layout>
         </ThemeProvider>
       </Auth0ProviderWithRedirectCallback>
-    </HashRouter>
+    </BrowserRouter>
   );
 }
 
