@@ -9,7 +9,9 @@ module.exports = {
     path: path.resolve(__dirname, "docs"),
   },
   plugins: [
-    new Dotenv(),
+    new Dotenv({
+      systemvars: true
+    }),
     new HtmlWebpackPlugin({
       template: path.join(__dirname, "docs", "index.html"),
     }),
