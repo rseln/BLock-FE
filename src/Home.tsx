@@ -103,7 +103,6 @@ const Home = () => {
         }
         return res.json();
       }).then((data)=>{
-        console.log("PENIS", data);
         setDevices(data);
       })
     }
@@ -130,25 +129,26 @@ const Home = () => {
         </Typography>
         <List>
           <Typography align="center" component="h3" variant="h3" sx={{ py: 3 }}>
-            Available Locks:
+            Locks:
           </Typography>
           {devices && devices.map(device => (
-            <ListItem>
+            <ListItem  sx={{ marginLeft: '36%' }}>
               {device.status === 'UNLOCKED' ? (
                 <Typography component="h5" variant="h5">
                   Lock {device.device_id}
-                  <CheckCircle sx={{ color: green[500] }} />
+                  <CheckCircle sx={{ margin: '0px 0px -3px 5px', color: green[500] }} />
                 </Typography>
               ) : (
                 <Typography component="h5" variant="h5">
                   Lock {device.device_id}
-                  <Cancel sx={{ color: red[500] }} />
+                  <Cancel sx={{ margin: '0px 0px -3px 5px', color: red[500] }} />
                 </Typography>
               )}
               <ListItemText primary={device.name} />
             </ListItem>
           ))}
         </List>
+
         { bookings.length === 0 ? 
           (<Typography align="center" component="h5" variant="h5" sx={{ py: 5 }}>
             You have no lockers booked right now.  
