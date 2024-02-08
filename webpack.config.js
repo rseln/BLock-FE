@@ -13,9 +13,7 @@ module.exports = {
       systemvars: true
     }),
     new HtmlWebpackPlugin({
-      template: "./build/index.html",
-      filename: "./index.html",
-      publicPath: "/",
+      template: path.join(__dirname, "public", "index.html"),
     }),
   ],
   devServer: {
