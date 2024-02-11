@@ -48,6 +48,7 @@ const Upcoming = () => {
           authorization: `Bearer ${token}`
       }
     })
+    getBookings()
   }
 
   const navigate = useNavigate(); 
