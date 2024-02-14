@@ -27,6 +27,8 @@ const Booking: React.FC = () => {
   
   const navigate = useNavigate(); 
   var now = dayjs()
+
+  const [availDevices, setAvailDevices] = useState<Array<any>>([]);
   const [deviceID, setDeviceID] = React.useState<Number>(0);
   const [startTime, setStartTime] = React.useState<Dayjs>(now);
   const [endTime, setEndTime] = React.useState<Dayjs>(now);
@@ -42,6 +44,7 @@ const Booking: React.FC = () => {
   };
 
 
+
   useEffect(() => {
     if (state) {
       // setDeviceID(state.device)
@@ -50,19 +53,30 @@ const Booking: React.FC = () => {
       setEndTime(dayjs(state.end_time))
       setDate(dayjs(state.end_time))
     }
+
+    const getDevices = async () =>{
+      const link = proxy
+      const token = await getAccessTokenSilently();
+      await fetch(`${link}/devices`,{
+        method: 'GET',
+        headers: {
+            'Content-Type': 'application/json',
+            authorization: `Bearer ${token}`
+        }
+      }).then((res)=>{
+        if (!res.ok) {
+          throw new Error(`HTTP error! Status: ${res.status}`);
+        }
+        return res.json();
+      }).then((data)=>{
+        data = data.filter(device => device.status === "UNLOCKED");
+        setAvailDevices(data)
+      })
+    }
+    getDevices()
   }, [])
 
-  const getDevices = async () =>{
-    const link = proxy
-    const token = await getAccessTokenSilently();
-    await fetch(`${link}/bookings/create`,{
-      method: 'GET',
-      headers: {
-          'Content-Type': 'application/json',
-          authorization: `Bearer ${token}`
-      }
-    })
-  }
+
 
   const handleSubmit = async (e) => {
     e.preventDefault()
@@ -162,9 +176,12 @@ const Booking: React.FC = () => {
                 onChange={(e) => setDeviceID(Number(e.target.value))}
               >
                 <MenuItem value={0}>No Selection</MenuItem> 
-                <MenuItem value={1}>Lock 1</MenuItem>
-                <MenuItem value={2}>Lock 2</MenuItem>
-                <MenuItem value={3}>Lock 3</MenuItem>
+                {
+                  availDevices && availDevices.map(device => (
+                       <MenuItem value={device.device_id}>Lock {device.device_id}</MenuItem>   
+                    )
+                  )
+                }
               </Select>
             </FormControl>
             <Stack direction="row" spacing={2}>

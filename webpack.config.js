@@ -9,7 +9,9 @@ module.exports = {
     path: path.resolve(__dirname, "build"),
   },
   plugins: [
-    new Dotenv(),
+    new Dotenv({
+      systemvars: true
+    }),
     new HtmlWebpackPlugin({
       template: path.join(__dirname, "public", "index.html"),
     }),
@@ -39,6 +41,6 @@ module.exports = {
     strictExportPresence: false,
   },
   resolve: {
-    extensions: ["*", ".js", ".jsx", ".ts", ".tsx"],
+    extensions: [".*", ".js", ".jsx", ".ts", ".tsx"],
   },
 };

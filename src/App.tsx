@@ -7,9 +7,9 @@ import Layout from "./Layout";
 import Upcoming from "./Upcoming";
 import Welcome from "./Welcome";
 import { useOnClickOutside } from './util/hooks';
-import React, { useState, useRef, useEffect } from "react";
+import { useState, useRef } from "react";
 import Menu from "./components/Menu";
-import { Auth0Provider, useAuth0, withAuthenticationRequired } from "@auth0/auth0-react";
+import { Auth0Provider, withAuthenticationRequired } from "@auth0/auth0-react";
 
 const theme = createTheme({
   palette: {
