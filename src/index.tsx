@@ -8,7 +8,8 @@ const rootElement = document.getElementById('root');
 const root = createRoot(rootElement);
 
 root.render(
-  <React.StrictMode>
+// StrictMode can be turned bac on for better testing, though keeping it will make things render twice
+//   <React.StrictMode>
     <App />
-  </React.StrictMode>
+//   </React.StrictMode>
 );
