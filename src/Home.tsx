@@ -33,29 +33,10 @@ const Home = () => {
     }
   }
   const [bookings, setBookings] = useState([])
-  const [keypadCode, setKeypadCode] = useState()
-
-  const getKeypadCode = async (deviceId) => {
-    const link = proxy
-    const token = await getAccessTokenSilently();
-    fetch(`${link}/devices?device_id=${encodeURIComponent(deviceId)}`,{
-        method: 'GET',
-        headers: {
-            'Content-Type': 'application/json',
-            authorization: `Bearer ${token}`
-        },
-    })
-    .then(response  => {return response.json()})
-    .then(data => {
-      setKeypadCode(data[0].keypad_code)
-    })
-  }
-
   
   useEffect(()=>{
     const getHomePageData = async () => {
       const link = proxy
-      // TODO: Change this hardcoded userId
       const token = await getAccessTokenSilently();
       fetch(`${link}/bookings?user_id=${encodeURIComponent(user.sub)}`,{
           method: 'GET',
@@ -74,8 +55,6 @@ const Home = () => {
           
           if (new Date(start) <= today && new Date(end) >= today) {
             const deviceId = data[i].device_id
-            await getKeypadCode(deviceId)
-  
             const startTime = getTime(start)
             const endTime =  getTime(end)
             const timeFrame = `${startTime} to ${endTime}`
@@ -160,7 +139,7 @@ const Home = () => {
             Instructions: Enter the keypad code followed by # to unlock the locker. Press * to re-lock.
           </Typography>
           <BookingDetail text="Locker Number" value={bookings[0].deviceId}></BookingDetail>
-          <BookingDetail text="Keypad Code" value={keypadCode}></BookingDetail>
+          <BookingDetail text="Keypad Code" value={bookings[0].keypad_code}></BookingDetail>
           <BookingDetail text="Booking Time Frame" value={bookings[0].timeFrame}></BookingDetail>
           </>)
         }
