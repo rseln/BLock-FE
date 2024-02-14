@@ -4,6 +4,7 @@ import CssBaseline from '@mui/material/CssBaseline';
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
+import Snackbar from '@mui/material/Snackbar';
 import { createTheme } from '@mui/material/styles';
 import { FormControl, InputLabel, Select, MenuItem } from '@mui/material';
 import Stack from '@mui/material/Stack';
@@ -26,11 +27,22 @@ const Booking: React.FC = () => {
   
   const navigate = useNavigate(); 
   var now = dayjs()
+
   const [availDevices, setAvailDevices] = useState<Array<any>>([]);
-  const [deviceID, setDeviceID] = useState<Number>(0);
-  const [startTime, setStartTime] = useState<Dayjs>(now);
-  const [endTime, setEndTime] = useState<Dayjs>(now);
-  const [date, setDate] = useState<Dayjs>(now);
+  const [deviceID, setDeviceID] = React.useState<Number>(0);
+  const [startTime, setStartTime] = React.useState<Dayjs>(now);
+  const [endTime, setEndTime] = React.useState<Dayjs>(now);
+  const [date, setDate] = React.useState<Dayjs>(now);
+  const [openSnackbar, setOpenSnackbar] = React.useState(false);
+  const [errorMessage, setErrorMessage] = React.useState("Error");
+
+  const handleCloseSnackbar = (event: React.SyntheticEvent | Event, reason?: string) => {
+    if (reason === 'clickaway') {
+      return;
+    }
+    setOpenSnackbar(false);
+  };
+
 
 
   useEffect(() => {
@@ -73,7 +85,7 @@ const Booking: React.FC = () => {
     let end_time = dateString + " " + endTime.format('HH:mm:ss')
     const token = await getAccessTokenSilently();
     const link = proxy
-    await fetch(`${link}/bookings/create`,{
+    await fetch(`${link}/bookings/create`, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
@@ -87,12 +99,20 @@ const Booking: React.FC = () => {
         })
     })
     .then((res) => {
-      return res.json()})
+      if(res.ok){
+        navigate(`/home`);
+      } else {
+        res.json().then(errorData => setErrorMessage(errorData.error));
+        setOpenSnackbar(true);
+      }
+      return res.json()
+    })
     .catch((error) => {
+      console.log("error:", error);
       return error
     })
-    navigate(`/home`);
   }
+  
   return (
       <Container component="main" maxWidth="sm">
         <CssBaseline />
@@ -183,6 +203,12 @@ const Booking: React.FC = () => {
             </Stack>
           </Box>
         </Box>
+        <Snackbar
+          open={openSnackbar}
+          autoHideDuration={5000}
+          onClose={handleCloseSnackbar}
+          message={errorMessage}
+        />
       </Container>
   );
 }

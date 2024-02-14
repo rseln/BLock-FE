@@ -3,7 +3,12 @@ import { bool } from 'prop-types';
 import { StyledMenu } from './MenuStyled';
 import CloseIcon from '@mui/icons-material/Close';
 import IconButton from '@mui/material/IconButton';
+import LogoutIcon from '@mui/icons-material/Logout';
+import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
+import EventAvailableIcon from '@mui/icons-material/EventAvailable';
+import HomeIcon from '@mui/icons-material/Home';
 import { useAuth0 } from '@auth0/auth0-react';
+
 
 const Menu = ({ open, setOpen, ...props }) => {
   
@@ -31,21 +36,21 @@ const Menu = ({ open, setOpen, ...props }) => {
         <CloseIcon />
       </IconButton>
       <a href="/home" tabIndex={tabIndex}>
-        <span aria-hidden="true">🏠</span>
-        Home Page
+        <span aria-hidden="true"><HomeIcon/></span>
+        Home
       </a>
       <a href="/upcoming" tabIndex={tabIndex}>
-        <span aria-hidden="true">💁🏻‍♂️</span>
-        Upcoming Bookings
+        <span aria-hidden="true"><EventAvailableIcon/></span>
+        Upcoming
       </a>
       <a href="/booking" tabIndex={tabIndex}>
-        <span aria-hidden="true">💸</span>
-        Book Here
-        </a>
+        <span aria-hidden="true"><CalendarMonthIcon/></span>
+        Book
+      </a>
       <a href="/" tabIndex={tabIndex} onClick={handleLogout}>
-        <span aria-hidden="true">📩</span>
+        <span aria-hidden="true"><LogoutIcon/></span>
         Logout
-        </a>
+      </a>
     </StyledMenu>
   )
 }

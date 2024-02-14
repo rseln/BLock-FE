@@ -11,7 +11,6 @@ import {
   IconButton,
   List,
   ListItem,
-  ListItemSecondaryAction,
   ListItemText,
 } from "@mui/material";
 import { proxy } from './util/constants';
@@ -49,6 +48,7 @@ const Upcoming = () => {
           authorization: `Bearer ${token}`
       }
     })
+    getBookings()
   }
 
   const navigate = useNavigate(); 

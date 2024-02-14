@@ -32,6 +32,12 @@ const theme = createTheme({
       xl: 1200,
     },
   },
+  typography: {
+    fontFamily: [
+      // 'Roboto',
+      '"Open Sans"',
+    ].join(','),
+  }
 });
 const AuthenticationGuard = ({component, ...args}) => {
   const Component = withAuthenticationRequired(component, args);
