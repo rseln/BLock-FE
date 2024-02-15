@@ -10,6 +10,7 @@ import { FormControl, InputLabel, Select, MenuItem } from '@mui/material';
 import Stack from '@mui/material/Stack';
 
 import dayjs, { Dayjs } from 'dayjs';
+import utc from 'dayjs/plugin/utc';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { TimePicker } from '@mui/x-date-pickers/TimePicker';
@@ -17,6 +18,7 @@ import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import { proxy } from './util/constants';
 import { useNavigate, useLocation } from "react-router-dom";
 import { useAuth0 } from '@auth0/auth0-react';
+dayjs.extend(utc);
 
   // NOTES:
   // - Retrieve devices from API and only show the ones that are available for use.
@@ -69,12 +71,38 @@ const Booking: React.FC = () => {
         }
         return res.json();
       }).then((data)=>{
+        console.log(data);
         data = data.filter(device => device.status === "UNLOCKED");
         setAvailDevices(data)
       })
     }
     getDevices()
   }, [])
+
+  useEffect(() => {
+    const deviceDateFilter = async () =>{
+      const link = proxy
+      const token = await getAccessTokenSilently();
+      await fetch(`${link}/devices/filter?startTime=${startTime.utc().unix() + startTime.utcOffset() * 60}&endTime=${endTime.utc().unix() + endTime.utcOffset() * 60}`,{
+        method: 'GET',
+        headers: {
+            'Content-Type': 'application/json',
+            authorization: `Bearer ${token}`
+        }
+      }).then((res)=>{
+        if (!res.ok) {
+          throw new Error(`HTTP error! Status: ${res.status}`);
+        }
+        return res.json();
+      }).then((data)=>{
+        console.log(data);
+        setAvailDevices(data);
+      })
+    }
+    deviceDateFilter()
+    
+
+  }, [startTime, endTime])
 
 
 
