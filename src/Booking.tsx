@@ -18,6 +18,8 @@ import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import { proxy } from './util/constants';
 import { useNavigate, useLocation } from "react-router-dom";
 import { useAuth0 } from '@auth0/auth0-react';
+import { roundUpTime } from './util/timeUtils';
+
 dayjs.extend(utc);
 
   // NOTES:
@@ -32,8 +34,8 @@ const Booking: React.FC = () => {
 
   const [availDevices, setAvailDevices] = useState<Array<any>>([]);
   const [deviceID, setDeviceID] = React.useState<Number>(0);
-  const [startTime, setStartTime] = React.useState<Dayjs>(now);
-  const [endTime, setEndTime] = React.useState<Dayjs>(now);
+  const [startTime, setStartTime] = React.useState<Dayjs>(roundUpTime(now));
+  const [endTime, setEndTime] = React.useState<Dayjs>(roundUpTime(now));
   const [date, setDate] = React.useState<Dayjs>(now);
   const [openSnackbar, setOpenSnackbar] = React.useState(false);
   const [errorMessage, setErrorMessage] = React.useState("Error");
@@ -45,7 +47,7 @@ const Booking: React.FC = () => {
     setOpenSnackbar(false);
   };
 
-
+  
 
   useEffect(() => {
     if (state) {
