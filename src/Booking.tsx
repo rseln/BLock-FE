@@ -47,7 +47,7 @@ const Booking: React.FC = () => {
     setOpenSnackbar(false);
   };
 
-  
+
 
   useEffect(() => {
     if (state) {
@@ -122,7 +122,7 @@ const Booking: React.FC = () => {
             authorization: `Bearer ${token}`
         },
         body: JSON.stringify({
-          device_id: deviceID,
+          device_id: deviceID === 0 ? availDevices[0].device_id : deviceID,
           user_id: user.sub,
           start_time,
           end_time
@@ -203,6 +203,7 @@ const Booking: React.FC = () => {
                 id="select-lock"
                 value={deviceID}
                 label="Select a lock"
+                disabled={availDevices.length === 0}
                 onChange={(e) => setDeviceID(Number(e.target.value))}
               >
                 <MenuItem value={0}>No Selection</MenuItem> 
@@ -213,6 +214,7 @@ const Booking: React.FC = () => {
                   )
                 }
               </Select>
+              {availDevices.length === 0 && <p>No locks available for the time requested.</p>}
             </FormControl>
             <Stack direction="row" spacing={2}>
               <Button
@@ -227,6 +229,7 @@ const Booking: React.FC = () => {
                 type="submit"
                 fullWidth
                 variant="contained"
+                disabled={availDevices.length === 0}
               >
                 Book Now
               </Button>
