@@ -34,8 +34,8 @@ const theme = createTheme({
   },
   typography: {
     fontFamily: [
-      // 'Roboto',
       '"Open Sans"',
+      'Roboto',
     ].join(','),
   }
 });

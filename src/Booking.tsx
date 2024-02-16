@@ -5,9 +5,9 @@ import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import Snackbar from '@mui/material/Snackbar';
-import { createTheme } from '@mui/material/styles';
 import { FormControl, InputLabel, Select, MenuItem } from '@mui/material';
 import Stack from '@mui/material/Stack';
+import Alert from '@mui/material/Alert';
 
 import dayjs, { Dayjs } from 'dayjs';
 import utc from 'dayjs/plugin/utc';
@@ -20,6 +20,7 @@ import { useNavigate, useLocation } from "react-router-dom";
 import { useAuth0 } from '@auth0/auth0-react';
 import { roundUpTime } from './util/timeUtils';
 
+
 dayjs.extend(utc);
 
   // NOTES:
@@ -27,7 +28,6 @@ dayjs.extend(utc);
 const Booking: React.FC = () => {
   const { user, getAccessTokenSilently } = useAuth0();
   const {state} = useLocation();
-  console.log("state", state)
   
   const navigate = useNavigate(); 
   var now = dayjs()
@@ -46,8 +46,6 @@ const Booking: React.FC = () => {
     }
     setOpenSnackbar(false);
   };
-
-
 
   useEffect(() => {
     if (state) {
@@ -102,10 +100,7 @@ const Booking: React.FC = () => {
       })
     }
     deviceDateFilter()
-    
-
   }, [startTime, endTime])
-
 
 
   const handleSubmit = async (e) => {
@@ -236,12 +231,7 @@ const Booking: React.FC = () => {
             </Stack>
           </Box>
         </Box>
-        <Snackbar
-          open={openSnackbar}
-          autoHideDuration={5000}
-          onClose={handleCloseSnackbar}
-          message={errorMessage}
-        />
+        {openSnackbar && <Alert severity="error" variant="outlined">{errorMessage}</Alert>}
       </Container>
   );
 }
