@@ -1,7 +1,7 @@
 import moment from "moment";
 
 export const getDate = (timestamp) => {
-    return moment.utc(timestamp).format('dddd, MMMM Do YYYY')
+    return moment.utc(timestamp).local().format('dddd, MMMM Do YYYY')
 }
 
 export const getTime = (timestamp) => {
