@@ -8,7 +8,27 @@ import MenuIcon from '@mui/icons-material/Menu';
 import { Container, CssBaseline } from '@mui/material';
 import { useLocation, useNavigate } from "react-router-dom";
 import { useAuth0 } from '@auth0/auth0-react';
+import { styled } from '@mui/material/styles';
 
+const Content = styled('div')(({ theme }) => ({
+  maxWidth:"sm",
+  [theme.breakpoints.down('sm')]: {
+    h2: {
+      fontSize: "3rem"
+    },
+    h3: {
+      fontSize: "2.2rem"
+    },
+  },
+  [theme.breakpoints.up('sm')]: {
+    h2: {
+      fontSize: "3.75rem"
+    },
+    h3: {
+      fontSize: "3rem"
+    },
+  },
+}));
 
 export default function ButtonAppBar({setOpen, open, ...props }) {
   const navigate = useNavigate(); 
@@ -41,14 +61,14 @@ export default function ButtonAppBar({setOpen, open, ...props }) {
             <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
               B - Lock
             </Typography>
-            {isAuthenticated && <Button color="inherit" onClick={handleLogout} >{"Logout"}</Button> }
+            {isAuthenticated && <Button color="inherit" onClick={handleLogout} >Logout</Button> }
           </Toolbar>
         </AppBar>
       </Box>
-      <Container maxWidth="sm">
-      <CssBaseline />
+      <Content>
+        <CssBaseline />
         {props.children}
-      </Container>
+      </Content>
     </div>
   );
 }

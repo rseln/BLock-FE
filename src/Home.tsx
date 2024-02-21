@@ -111,7 +111,7 @@ const Home = () => {
             Locks:
           </Typography>
           {devices && devices.map(device => (
-            <ListItem  sx={{ marginLeft: '36%' }}>
+            <ListItem sx={{justifyContent:'center'}}>
               {device.status === 'UNLOCKED' ? (
                 <Typography component="h5" variant="h5">
                   Lock {device.device_id}
@@ -123,7 +123,7 @@ const Home = () => {
                   <Cancel sx={{ margin: '0px 0px -3px 5px', color: red[500] }} />
                 </Typography>
               )}
-              <ListItemText primary={device.name} />
+              {/* <ListItemText primary={device.name} /> */}
             </ListItem>
           ))}
         </List>
