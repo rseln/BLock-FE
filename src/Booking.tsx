@@ -5,9 +5,9 @@ import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import Snackbar from '@mui/material/Snackbar';
-import { createTheme } from '@mui/material/styles';
 import { FormControl, InputLabel, Select, MenuItem } from '@mui/material';
 import Stack from '@mui/material/Stack';
+import Alert from '@mui/material/Alert';
 
 import dayjs, { Dayjs } from 'dayjs';
 import utc from 'dayjs/plugin/utc';
@@ -18,6 +18,9 @@ import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import { proxy } from './util/constants';
 import { useNavigate, useLocation } from "react-router-dom";
 import { useAuth0 } from '@auth0/auth0-react';
+import { roundUpTime } from './util/timeUtils';
+
+
 dayjs.extend(utc);
 
   // NOTES:
@@ -25,15 +28,14 @@ dayjs.extend(utc);
 const Booking: React.FC = () => {
   const { user, getAccessTokenSilently } = useAuth0();
   const {state} = useLocation();
-  console.log("state", state)
   
   const navigate = useNavigate(); 
   var now = dayjs()
 
   const [availDevices, setAvailDevices] = useState<Array<any>>([]);
   const [deviceID, setDeviceID] = React.useState<Number>(0);
-  const [startTime, setStartTime] = React.useState<Dayjs>(now);
-  const [endTime, setEndTime] = React.useState<Dayjs>(now);
+  const [startTime, setStartTime] = React.useState<Dayjs>(roundUpTime(now));
+  const [endTime, setEndTime] = React.useState<Dayjs>(roundUpTime(now));
   const [date, setDate] = React.useState<Dayjs>(now);
   const [openSnackbar, setOpenSnackbar] = React.useState(false);
   const [errorMessage, setErrorMessage] = React.useState("Error");
@@ -44,8 +46,6 @@ const Booking: React.FC = () => {
     }
     setOpenSnackbar(false);
   };
-
-
 
   useEffect(() => {
     if (state) {
@@ -100,10 +100,7 @@ const Booking: React.FC = () => {
       })
     }
     deviceDateFilter()
-    
-
   }, [startTime, endTime])
-
 
 
   const handleSubmit = async (e) => {
@@ -120,7 +117,7 @@ const Booking: React.FC = () => {
             authorization: `Bearer ${token}`
         },
         body: JSON.stringify({
-          device_id: deviceID,
+          device_id: deviceID === 0 ? availDevices[0].device_id : deviceID,
           user_id: user.sub,
           start_time,
           end_time
@@ -201,6 +198,7 @@ const Booking: React.FC = () => {
                 id="select-lock"
                 value={deviceID}
                 label="Select a lock"
+                disabled={availDevices.length === 0}
                 onChange={(e) => setDeviceID(Number(e.target.value))}
               >
                 <MenuItem value={0}>No Selection</MenuItem> 
@@ -211,6 +209,7 @@ const Booking: React.FC = () => {
                   )
                 }
               </Select>
+              {availDevices.length === 0 && <p>No locks available for the time requested.</p>}
             </FormControl>
             <Stack direction="row" spacing={2}>
               <Button
@@ -225,18 +224,14 @@ const Booking: React.FC = () => {
                 type="submit"
                 fullWidth
                 variant="contained"
+                disabled={availDevices.length === 0}
               >
                 Book Now
               </Button>
             </Stack>
           </Box>
         </Box>
-        <Snackbar
-          open={openSnackbar}
-          autoHideDuration={5000}
-          onClose={handleCloseSnackbar}
-          message={errorMessage}
-        />
+        {openSnackbar && <Alert severity="error" variant="outlined">{errorMessage}</Alert>}
       </Container>
   );
 }
