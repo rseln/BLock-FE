@@ -21,9 +21,9 @@ export const StyledMenu = styled.nav<Props>`
   z-index: 1;
   min-width: 400px;
 
-  @media (max-width: ${({ theme }) => theme.mobile}) {
-      width: 100%;
-    }
+  // @media (max-width: ${({ theme }) => theme.mobile}) {
+  //   width: 100%;
+  // }
 
   a {
     font-size: 1.3rem;
@@ -37,10 +37,10 @@ export const StyledMenu = styled.nav<Props>`
 
     color: 0D0C1D;
 
-    @media (max-width: ${({ theme }) => theme.mobile}) {
-      font-size: 1.5rem;
-      text-align: center;
-    }
+    // @media (max-width: 576px) {
+    //   font-size: 1.5rem;
+    //   text-align: center;
+    // }
 
     &:hover {
       color: ${({ theme }) => theme.primaryHover};

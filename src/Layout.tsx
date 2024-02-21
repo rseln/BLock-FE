@@ -41,7 +41,7 @@ export default function ButtonAppBar({setOpen, open, ...props }) {
             <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
               B - Lock
             </Typography>
-            {isAuthenticated && <Button color="inherit" onClick={handleLogout} >{"Logout"}</Button> }
+            {isAuthenticated && <Button color="inherit" onClick={handleLogout} >Logout</Button> }
           </Toolbar>
         </AppBar>
       </Box>

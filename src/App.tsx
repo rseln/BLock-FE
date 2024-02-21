@@ -37,8 +37,9 @@ const theme = createTheme({
       '"Open Sans"',
       'Roboto',
     ].join(','),
-  }
+  },
 });
+
 const AuthenticationGuard = ({component, ...args}) => {
   const Component = withAuthenticationRequired(component, args);
   return <Component />;
