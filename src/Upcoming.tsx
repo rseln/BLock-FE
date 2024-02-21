@@ -76,11 +76,6 @@ const Upcoming = () => {
 
         parsedData.push({date, startTime, endTime, booking_id})
       }
-      const date = ""
-      const startTime = ""
-      const endTime =  ""
-      const booking_id = ""
-      parsedData.push({date, startTime, endTime, booking_id})
       
       // console.log(data.start_time)
       setBookings(parsedData)
