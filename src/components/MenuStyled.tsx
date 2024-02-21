@@ -20,6 +20,10 @@ export const StyledMenu = styled.nav<Props>`
   width: fit-content;
   z-index: 1;
   min-width: 400px;
+  
+  @media (max-width: 576px){
+    min-width: 100%;
+  }
 
   // @media (max-width: ${({ theme }) => theme.mobile}) {
   //   width: 100%;
