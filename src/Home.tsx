@@ -58,8 +58,9 @@ const Home = () => {
             const startTime = getTime(start)
             const endTime =  getTime(end)
             const timeFrame = `${startTime} to ${endTime}`
+            const keypadCode = data[i].keypad_code
   
-            parsedData.push({deviceId, timeFrame})
+            parsedData.push({deviceId, timeFrame, keypadCode})
           }  
         }
         setBookings(parsedData)
@@ -139,7 +140,7 @@ const Home = () => {
             Instructions: Enter the keypad code followed by # to unlock the locker. Press * to re-lock.
           </Typography>
           <BookingDetail text="Locker Number" value={bookings[0].deviceId}></BookingDetail>
-          <BookingDetail text="Keypad Code" value={bookings[0].keypad_code}></BookingDetail>
+          <BookingDetail text="Keypad Code" value={bookings[0].keypadCode}></BookingDetail>
           <BookingDetail text="Booking Time Frame" value={bookings[0].timeFrame}></BookingDetail>
           </>)
         }
