@@ -72,8 +72,9 @@ const Booking: React.FC = () => {
         return res.json();
       }).then((data)=>{
         console.log(data);
-        data = data.filter(device => device.status === "UNLOCKED");
+        data = data.filter(device => device.status === "NOT BOOKED");
         setAvailDevices(data)
+        console.log(availDevices);
       })
     }
     getDevices()
@@ -96,7 +97,19 @@ const Booking: React.FC = () => {
         return res.json();
       }).then((data)=>{
         console.log(data);
-        setAvailDevices(data);
+        let taken_set = new Set();
+        data.forEach((device) => {
+          taken_set.add(device.device_id);
+        })
+        let new_avail = [];
+        availDevices.forEach((device) => {
+          if (!(taken_set.has(device.device_id))) {
+            new_avail.push(device)
+          }
+        });
+        console.log(new_avail);
+        setAvailDevices(new_avail);
+        console.log(availDevices);
       })
     }
     deviceDateFilter()

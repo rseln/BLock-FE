@@ -64,7 +64,7 @@ const Home = () => {
           }  
         }
         setBookings(parsedData)
-        console.log(data)
+        console.log(parsedData)
       })
     }
     
