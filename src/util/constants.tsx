@@ -1,1 +1,1 @@
-export const proxy = 'http://localhost:8000'
+export const proxy = process.env.REACT_APP_BE_PROXY;
