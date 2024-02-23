@@ -124,7 +124,7 @@ const Booking: React.FC = () => {
       setMinEnd(roundUpTime(now.add(15, 'minute')));
     }
     // when start is changed to after end, shift end
-    if (endTime < startTime) {
+    if (endTime <= startTime) {
       setEndTime(startTime.add(15, 'minute'));
     } else if (endTime.diff(startTime, 'minute') > 180) {
       // if greater than 3 hour diff
