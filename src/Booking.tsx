@@ -115,20 +115,23 @@ const Booking: React.FC = () => {
   }, [])
 
   useEffect(() => {
-    // enforce min start time and end time rules
-    if (date.date() > now.date()) {
-      setMinStart(null);
-      setMinEnd(null);
-    } else {
-      setMinStart(roundUpTime(now));
-      setMinEnd(roundUpTime(now.add(15, 'minute')));
-    }
-    // when start is changed to after end, shift end
-    if (endTime <= startTime) {
-      setEndTime(startTime.add(15, 'minute'));
-    } else if (endTime.diff(startTime, 'minute') > 180) {
-      // if greater than 3 hour diff
-      setEndTime(startTime.add(3, 'hour'));
+    let testing = false;
+    if (!testing) {
+      // enforce min start time and end time rules
+      if (date.date() > now.date()) {
+        setMinStart(null);
+        setMinEnd(null);
+      } else {
+        setMinStart(roundUpTime(now));
+        setMinEnd(roundUpTime(now.add(15, 'minute')));
+      }
+      // when start is changed to after end, shift end
+      if (endTime <= startTime) {
+        setEndTime(startTime.add(15, 'minute'));
+      } else if (endTime.diff(startTime, 'minute') > 180) {
+        // if greater than 3 hour diff
+        setEndTime(startTime.add(3, 'hour'));
+      }
     }
 
     getDevices();
