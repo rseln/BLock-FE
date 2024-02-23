@@ -13,7 +13,7 @@ import dayjs, { Dayjs } from 'dayjs';
 import utc from 'dayjs/plugin/utc';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
-import { TimePicker } from '@mui/x-date-pickers/TimePicker';
+import { MobileTimePicker  } from '@mui/x-date-pickers/MobileTimePicker';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import { proxy } from './util/constants';
 import { useNavigate, useLocation } from "react-router-dom";
@@ -35,7 +35,7 @@ const Booking: React.FC = () => {
   const [availDevices, setAvailDevices] = useState<Array<any>>([]);
   const [deviceID, setDeviceID] = React.useState<Number>(0);
   const [startTime, setStartTime] = React.useState<Dayjs>(roundUpTime(now));
-  const [endTime, setEndTime] = React.useState<Dayjs>(roundUpTime(now));
+  const [endTime, setEndTime] = React.useState<Dayjs>(roundUpTime(now.add(15, "minute")));
   const [date, setDate] = React.useState<Dayjs>(now);
   const [openSnackbar, setOpenSnackbar] = React.useState(false);
   const [errorMessage, setErrorMessage] = React.useState("Error");
@@ -47,71 +47,75 @@ const Booking: React.FC = () => {
     setOpenSnackbar(false);
   };
 
+  const getDevices = async () =>{
+    const link = proxy
+    const token = await getAccessTokenSilently();
+    await fetch(`${link}/devices`,{
+      method: 'GET',
+      headers: {
+          'Content-Type': 'application/json',
+          authorization: `Bearer ${token}`
+      }
+    }).then((res)=>{
+      if (!res.ok) {
+        throw new Error(`HTTP error! Status: ${res.status}`);
+      }
+      return res.json();
+    }).then((data)=>{
+      console.log(data);
+      data = data.filter(device => device.status === "NOT BOOKED");
+      setAvailDevices(data)
+      console.log(availDevices);
+    })
+  }
+
+  const deviceDateFilter = async () =>{
+    const link = proxy
+    const token = await getAccessTokenSilently();
+    await fetch(`${link}/devices/filter?startTime=${startTime.utc().unix() + startTime.utcOffset() * 60}&endTime=${endTime.utc().unix() + endTime.utcOffset() * 60}`,{
+      method: 'GET',
+      headers: {
+          'Content-Type': 'application/json',
+          authorization: `Bearer ${token}`
+      }
+    }).then((res)=>{
+      if (!res.ok) {
+        throw new Error(`HTTP error! Status: ${res.status}`);
+      }
+      return res.json();
+    }).then((data)=>{
+      console.log(data);
+      let taken_set = new Set();
+      data.forEach((device) => {
+        taken_set.add(device.device_id);
+      })
+      console.log(taken_set)
+      let new_avail = [];
+      availDevices.forEach((device) => {
+        if (!(taken_set.has(device.device_id))) {
+          new_avail.push(device)
+        }
+      });
+      setAvailDevices(new_avail);
+      console.log(new_avail);
+    })
+  }
+
   useEffect(() => {
     if (state) {
       // setDeviceID(state.device)
-      console.log(dayjs(state.start_time))
       setStartTime(dayjs(state.start_time))
       setEndTime(dayjs(state.end_time))
       setDate(dayjs(state.end_time))
     }
 
-    const getDevices = async () =>{
-      const link = proxy
-      const token = await getAccessTokenSilently();
-      await fetch(`${link}/devices`,{
-        method: 'GET',
-        headers: {
-            'Content-Type': 'application/json',
-            authorization: `Bearer ${token}`
-        }
-      }).then((res)=>{
-        if (!res.ok) {
-          throw new Error(`HTTP error! Status: ${res.status}`);
-        }
-        return res.json();
-      }).then((data)=>{
-        console.log(data);
-        data = data.filter(device => device.status === "NOT BOOKED");
-        setAvailDevices(data)
-        console.log(availDevices);
-      })
-    }
     getDevices()
+    deviceDateFilter()
+    console.log(availDevices);
   }, [])
 
   useEffect(() => {
-    const deviceDateFilter = async () =>{
-      const link = proxy
-      const token = await getAccessTokenSilently();
-      await fetch(`${link}/devices/filter?startTime=${startTime.utc().unix() + startTime.utcOffset() * 60}&endTime=${endTime.utc().unix() + endTime.utcOffset() * 60}`,{
-        method: 'GET',
-        headers: {
-            'Content-Type': 'application/json',
-            authorization: `Bearer ${token}`
-        }
-      }).then((res)=>{
-        if (!res.ok) {
-          throw new Error(`HTTP error! Status: ${res.status}`);
-        }
-        return res.json();
-      }).then((data)=>{
-        console.log(data);
-        let taken_set = new Set();
-        data.forEach((device) => {
-          taken_set.add(device.device_id);
-        })
-        let new_avail = [];
-        availDevices.forEach((device) => {
-          if (!(taken_set.has(device.device_id))) {
-            new_avail.push(device)
-          }
-        });
-        console.log(new_avail);
-        setAvailDevices(new_avail);
-        console.log(availDevices);
-      })
-    }
+    getDevices()
     deviceDateFilter()
   }, [startTime, endTime])
 
@@ -182,7 +186,7 @@ const Booking: React.FC = () => {
             </Typography>
             <Stack direction="row" spacing={2} sx={{my: 3}}>
               <LocalizationProvider dateAdapter={AdapterDayjs}>
-                <TimePicker
+                <MobileTimePicker 
                   label="Start Time"
                   value={startTime}
                   minutesStep={15}
@@ -190,7 +194,7 @@ const Booking: React.FC = () => {
                   // minTime={today ? now : dayjs().set('hour', 0)} // NOT SURE IF IT SHOULD BE 0 OR WHAT
                   onChange={(newValue) => setStartTime(newValue)}
                 />
-                <TimePicker
+                <MobileTimePicker 
                   label="End Time"
                   value={endTime}
                   minutesStep={15}

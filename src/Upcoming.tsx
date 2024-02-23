@@ -28,8 +28,8 @@ interface IBooking {
 const Upcoming = () => {  
   const {user, getAccessTokenSilently} = useAuth0()
   const [bookings, setBookings] = useState([])
-  const [this_start, setStart] = useState()
-  const [this_end, setEnd] = useState()
+  const [this_start, setStart] = useState<String>("")
+  const [this_end, setEnd] = useState<String>("")
 
   const handleEditBooking = (reservation) => {
     console.log("reservation ",reservation, this_start, this_end)
@@ -82,8 +82,8 @@ const Upcoming = () => {
       // console.log(data.start_time)
       setBookings(parsedData)
       if(data[0]){
-        setStart(data[0].start_time)
-        setEnd(data[0].end_time)
+        setStart(getTime(data[0].start_time))
+        setEnd(getTime(data[0].end_time))
       }
       console.log(data)
     })
