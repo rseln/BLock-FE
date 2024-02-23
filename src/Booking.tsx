@@ -39,6 +39,8 @@ const Booking: React.FC = () => {
   const [date, setDate] = React.useState<Dayjs>(now);
   const [openSnackbar, setOpenSnackbar] = React.useState(false);
   const [errorMessage, setErrorMessage] = React.useState("Error");
+  const [minStart, setMinStart] = React.useState(null);
+  const [minEnd, setMinEnd] = React.useState(null);
 
   const handleCloseSnackbar = (event: React.SyntheticEvent | Event, reason?: string) => {
     if (reason === 'clickaway') {
@@ -62,43 +64,45 @@ const Booking: React.FC = () => {
       }
       return res.json();
     }).then((data)=>{
-      console.log(data);
       data = data.filter(device => device.status === "NOT BOOKED");
       setAvailDevices(data)
-      console.log(availDevices);
-    })
+    }).then(() => deviceDateFilter())
   }
 
   const deviceDateFilter = async () =>{
-    const link = proxy
-    const token = await getAccessTokenSilently();
-    await fetch(`${link}/devices/filter?startTime=${startTime.utc().unix() + startTime.utcOffset() * 60}&endTime=${endTime.utc().unix() + endTime.utcOffset() * 60}`,{
-      method: 'GET',
-      headers: {
-          'Content-Type': 'application/json',
-          authorization: `Bearer ${token}`
-      }
-    }).then((res)=>{
-      if (!res.ok) {
-        throw new Error(`HTTP error! Status: ${res.status}`);
-      }
-      return res.json();
-    }).then((data)=>{
-      console.log(data);
-      let taken_set = new Set();
-      data.forEach((device) => {
-        taken_set.add(device.device_id);
-      })
-      console.log(taken_set)
-      let new_avail = [];
-      availDevices.forEach((device) => {
-        if (!(taken_set.has(device.device_id))) {
-          new_avail.push(device)
+    if (availDevices.length > 0) {
+      console.log(availDevices);
+      const link = proxy
+      const token = await getAccessTokenSilently();
+      await fetch(`${link}/devices/filter?startTime=${startTime.utc().unix() + startTime.utcOffset() * 60}&endTime=${endTime.utc().unix() + endTime.utcOffset() * 60}`,{
+        method: 'GET',
+        headers: {
+            'Content-Type': 'application/json',
+            authorization: `Bearer ${token}`
         }
-      });
-      setAvailDevices(new_avail);
-      console.log(new_avail);
-    })
+      }).then((res)=>{
+        if (!res.ok) {
+          throw new Error(`HTTP error! Status: ${res.status}`);
+        }
+        return res.json();
+      }).then((data)=>{
+        let taken_set = new Set();
+        data.forEach((device) => {
+          taken_set.add(device.device_id);
+        })
+        console.log(taken_set);
+        let new_avail = [];
+        availDevices.forEach((device) => {
+          console.log(device);
+          if (!(taken_set.has(device.device_id))) {
+            new_avail.push(device)
+          }
+        });
+        console.log(availDevices);
+        setAvailDevices(new_avail);
+        console.log(new_avail);
+      })
+    }
   }
 
   useEffect(() => {
@@ -108,16 +112,27 @@ const Booking: React.FC = () => {
       setEndTime(dayjs(state.end_time))
       setDate(dayjs(state.end_time))
     }
-
-    getDevices()
-    deviceDateFilter()
-    console.log(availDevices);
   }, [])
 
   useEffect(() => {
-    getDevices()
-    deviceDateFilter()
-  }, [startTime, endTime])
+    // enforce min start time and end time rules
+    if (date.date() > now.date()) {
+      setMinStart(null);
+      setMinEnd(null);
+    } else {
+      setMinStart(roundUpTime(now));
+      setMinEnd(roundUpTime(now.add(15, 'minute')));
+    }
+    // when start is changed to after end, shift end
+    if (endTime < startTime) {
+      setEndTime(startTime.add(15, 'minute'));
+    } else if (endTime.diff(startTime, 'minute') > 180) {
+      // if greater than 3 hour diff
+      setEndTime(startTime.add(3, 'hour'));
+    }
+
+    getDevices();
+  }, [startTime, endTime, date])
 
 
   const handleSubmit = async (e) => {
@@ -177,6 +192,7 @@ const Booking: React.FC = () => {
               <DatePicker 
                 label="Date"
                 value={date}
+                minDate={now}
                 onChange={(newValue) => setDate(newValue)}
                 sx={{width: "-webkit-fill-available", my: 3}}
               />
@@ -189,6 +205,7 @@ const Booking: React.FC = () => {
                 <MobileTimePicker 
                   label="Start Time"
                   value={startTime}
+                  minTime={minStart}
                   minutesStep={15}
                   // if date it today, make sure min time is not a previous time
                   // minTime={today ? now : dayjs().set('hour', 0)} // NOT SURE IF IT SHOULD BE 0 OR WHAT
@@ -198,6 +215,7 @@ const Booking: React.FC = () => {
                   label="End Time"
                   value={endTime}
                   minutesStep={15}
+                  minTime={minEnd}
                   maxTime={startTime.add(3, 'hour')}
                   onChange={(newValue) => setEndTime(newValue)}
                 />

@@ -11,6 +11,7 @@ export const getTime = (timestamp) => {
 export const roundUpTime = (timestamp) => {
     let hours = timestamp.hour();
     let minutes = timestamp.minute();
+    let seconds = timestamp.second();
     
     if (minutes > 0 && minutes <= 15) {
         minutes = 15;
@@ -22,6 +23,7 @@ export const roundUpTime = (timestamp) => {
         hours += 1;
         minutes = 0;
     }
+    seconds = 0;
 
-    return timestamp.hour(hours).minute(minutes);
+    return timestamp.hour(hours).minute(minutes).second(seconds);
 }
