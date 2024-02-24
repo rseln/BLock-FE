@@ -117,13 +117,16 @@ const Booking: React.FC = () => {
   useEffect(() => {
     let testing = false;
     if (!testing) {
+      console.log(startTime);
+      console.log(endTime);
       // enforce min start time and end time rules
       if (date.date() > now.date()) {
         setMinStart(null);
         setMinEnd(null);
       } else {
         setMinStart(roundUpTime(now));
-        setMinEnd(roundUpTime(now.add(15, 'minute')));
+        setMinEnd(roundUpTime(now).add(15, 'minute'));
+        console.log(roundUpTime(now).add(15, 'minute'));
       }
       // when start is changed to after end, shift end
       if (endTime <= startTime) {
@@ -242,7 +245,7 @@ const Booking: React.FC = () => {
                 <MenuItem value={0}>No Selection</MenuItem> 
                 {
                   availDevices && availDevices.map(device => (
-                       <MenuItem value={device.device_id}>Lock {device.device_id}</MenuItem>   
+                       <MenuItem key={device.device_id}value={device.device_id}>Lock {device.device_id}</MenuItem>   
                     )
                   )
                 }
