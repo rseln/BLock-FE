@@ -27,3 +27,12 @@ export const roundUpTime = (timestamp) => {
 
     return timestamp.hour(hours).minute(minutes).second(seconds);
 }
+
+export const addTimeWithCeiling = (timestamp, addend, unit) => {
+    let new_time = timestamp.add(addend, unit);
+    if (new_time.date() > timestamp.date()) {
+        return timestamp.hour(23).minute(45).second(0);
+    } else {
+        return new_time;
+    }
+}

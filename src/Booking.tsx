@@ -18,7 +18,7 @@ import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import { proxy } from './util/constants';
 import { useNavigate, useLocation } from "react-router-dom";
 import { useAuth0 } from '@auth0/auth0-react';
-import { roundUpTime } from './util/timeUtils';
+import { addTimeWithCeiling, roundUpTime } from './util/timeUtils';
 
 
 dayjs.extend(utc);
@@ -116,9 +116,8 @@ const Booking: React.FC = () => {
 
   useEffect(() => {
     let testing = false;
+    console.log(startTime.add(3, 'hour'));
     if (!testing) {
-      console.log(startTime);
-      console.log(endTime);
       // enforce min start time and end time rules
       if (date.date() > now.date()) {
         setMinStart(null);
@@ -126,7 +125,6 @@ const Booking: React.FC = () => {
       } else {
         setMinStart(roundUpTime(now));
         setMinEnd(roundUpTime(now).add(15, 'minute'));
-        console.log(roundUpTime(now).add(15, 'minute'));
       }
       // when start is changed to after end, shift end
       if (endTime <= startTime) {
@@ -222,7 +220,7 @@ const Booking: React.FC = () => {
                   value={endTime}
                   minutesStep={15}
                   minTime={minEnd}
-                  maxTime={startTime.add(3, 'hour')}
+                  maxTime={addTimeWithCeiling(startTime, 3, 'hour')}
                   onChange={(newValue) => setEndTime(newValue)}
                 />
               </LocalizationProvider>
