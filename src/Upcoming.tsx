@@ -3,7 +3,6 @@ import CssBaseline from "@mui/material/CssBaseline";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
-import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from '@mui/icons-material/Delete';
 import {
   Divider,
@@ -30,11 +29,6 @@ const Upcoming = () => {
   const [bookings, setBookings] = useState([])
   const [this_start, setStart] = useState<String>("")
   const [this_end, setEnd] = useState<String>("")
-
-  const handleEditBooking = (reservation) => {
-    console.log("reservation ",reservation, this_start, this_end)
-    navigate('/booking', { state: {start_time: this_start, end_time:this_end} });
-  }
 
   const deleteBooking = async (booking_id) => {
     console.log(booking_id)
@@ -116,14 +110,9 @@ const Upcoming = () => {
                     {idx !== 0 && <Divider variant="middle" component="li" />}
                     <ListItem
                       secondaryAction={
-                        <>
-                          <IconButton edge="end" aria-label="edit" onClick={() => handleEditBooking(reservation)}>
-                            <EditIcon />
-                          </IconButton>
-                          <IconButton edge="end" aria-label="delete" onClick={() => deleteBooking(reservation.booking_id)}>
-                            <DeleteIcon />
-                          </IconButton>
-                        </>
+                        <IconButton edge="end" aria-label="delete" onClick={() => deleteBooking(reservation.booking_id)}>
+                          <DeleteIcon />
+                        </IconButton>
                       }
                     >
                       <ListItemText
