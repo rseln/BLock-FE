@@ -14,10 +14,12 @@ import { useNavigate } from "react-router-dom";
 import { useAuth0 } from '@auth0/auth0-react';
 import { Cancel, CheckCircle } from '@mui/icons-material';
 import { green, red } from '@mui/material/colors';
+import dayjs, { Dayjs } from 'dayjs';
 
 const Home = () => {
   const {user, getAccessTokenSilently } = useAuth0();
   const today = new Date()
+  var now = dayjs()
   const [devices, setDevices] = useState<Array<any>>();
   const estimateTime = () => {
     const curHour = today.getHours()
@@ -83,8 +85,46 @@ const Home = () => {
         }
         return res.json();
       }).then((data)=>{
-        setDevices(data);
+        deviceDateFilter(data);
       })
+    }
+
+    const deviceDateFilter = async (device_list) =>{
+      console.log(device_list)
+      if (device_list.length > 0) {
+        console.log(device_list);
+        const link = proxy
+        const token = await getAccessTokenSilently();
+        let filter_start = now;
+        let filter_end = now.add(15, 'minute');
+        await fetch(`${link}/devices/filter?startTime=${filter_start.utc().unix() + filter_start.utcOffset() * 60}&endTime=${filter_end.utc().unix() + filter_end.utcOffset() * 60}`,{
+          method: 'GET',
+          headers: {
+              'Content-Type': 'application/json',
+              authorization: `Bearer ${token}`
+          }
+        }).then((res)=>{
+          if (!res.ok) {
+            throw new Error(`HTTP error! Status: ${res.status}`);
+          }
+          return res.json();
+        }).then((data)=>{
+          let taken_set = new Set();
+          data.forEach((device) => {
+            taken_set.add(device.device_id);
+          })
+          console.log(taken_set);
+          device_list.forEach((device) => {
+            console.log(device);
+            if (taken_set.has(device.device_id)) {
+              device.status = "LOCKED";
+            } else {
+              device.status = "UNLOCKED";
+            }
+          });
+          setDevices(device_list);
+        })
+      }
     }
 
     getDevices();
@@ -112,7 +152,7 @@ const Home = () => {
             Locks:
           </Typography>
           {devices && devices.map(device => (
-            <ListItem sx={{justifyContent:'center'}}>
+            <ListItem sx={{justifyContent:'center'}} key={device.device_id}>
               {device.status === 'UNLOCKED' ? (
                 <Typography component="h5" variant="h5">
                   Lock {device.device_id}

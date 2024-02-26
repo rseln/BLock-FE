@@ -124,7 +124,6 @@ const Booking: React.FC = () => {
     if (!testing) {
       // enforce min start time and end time rules
       if (date > now) {
-        console.log("FUTURE");
         setMinStart(null);
         setMinEnd(null);
       } else {
@@ -136,7 +135,7 @@ const Booking: React.FC = () => {
         setEndTime(startTime.add(15, 'minute'));
       } else if (endTime.diff(startTime, 'minute') > 180) {
         // if greater than 3 hour diff
-        setEndTime(startTime.add(3, 'hour'));
+        setEndTime(addTimeWithCeiling(startTime, 3, 'hour'));
       }
     }
 
