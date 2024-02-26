@@ -145,9 +145,13 @@ const Booking: React.FC = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault()
-    let dateString = date.format('YYYY-MM-DD')
-    let start_time = dateString + " " + startTime.format('HH:mm:ss')
-    let end_time = dateString + " " + endTime.format('HH:mm:ss')
+    // let dateString = date.format('YYYY-MM-DD')
+    // let start_time = dateString + " " + startTime.format('HH:mm:ss')
+    // let end_time = dateString + " " + endTime.format('HH:mm:ss')
+
+    let start_time = startTime.year(date.year()).month(date.month()).date(date.date()).utc().format('YYYY-MM-DD HH:mm:ss');
+    let end_time = endTime.year(date.year()).month(date.month()).date(date.date()).utc().format('YYYY-MM-DD HH:mm:ss');
+
     const token = await getAccessTokenSilently();
     const link = proxy
     await fetch(`${link}/bookings/create`, {

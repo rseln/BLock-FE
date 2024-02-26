@@ -181,7 +181,7 @@ const Home = () => {
           </Typography>
           <BookingDetail text="Locker Number" value={bookings[0].deviceId}></BookingDetail>
           <BookingDetail text="Keypad Code" value={bookings[0].keypadCode}></BookingDetail>
-          <BookingDetail text="Booking Time Frame" value={getTime(bookings[0].timeFrame)}></BookingDetail>
+          <BookingDetail text="Booking Time Frame" value={(bookings[0].timeFrame)}></BookingDetail>
           </>)
         }
         
