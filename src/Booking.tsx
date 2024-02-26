@@ -63,6 +63,9 @@ const Booking: React.FC = () => {
         throw new Error(`HTTP error! Status: ${res.status}`);
       }
       return res.json();
+    }).catch((err)=>{
+      console.log(err);
+      return {};
     }).then((data)=>{
       console.log(data)
       data = data.filter(device => device.status === "NOT BOOKED");
@@ -91,6 +94,9 @@ const Booking: React.FC = () => {
           throw new Error(`HTTP error! Status: ${res.status}`);
         }
         return res.json();
+      }).catch((err)=>{
+        console.log(err);
+        return {};
       }).then((data)=>{
         let taken_set = new Set();
         data.forEach((device) => {

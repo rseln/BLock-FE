@@ -42,6 +42,10 @@ const Home = () => {
           },
       })
       .then(response  => {return response.json()})
+      .catch((err)=>{
+        console.log(err);
+        return {};
+      })
       .then(async data => {
         console.log("HELLO", data)
         const parsedData = []
@@ -78,6 +82,9 @@ const Home = () => {
           throw new Error(`HTTP error! Status: ${res.status}`);
         }
         return res.json();
+      }).catch((err)=>{
+        console.log(err);
+        return {};
       }).then((data)=>{
         deviceDateFilter(data);
       })
@@ -102,6 +109,9 @@ const Home = () => {
             throw new Error(`HTTP error! Status: ${res.status}`);
           }
           return res.json();
+        }).catch((err)=>{
+          console.log(err);
+          return {};
         }).then((data)=>{
           let taken_set = new Set();
           data.forEach((device) => {
