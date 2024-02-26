@@ -5,8 +5,8 @@ import Typography from '@mui/material/Typography';
 import Button from '@mui/material/Button';
 import IconButton from '@mui/material/IconButton';
 import MenuIcon from '@mui/icons-material/Menu';
-import { Container, CssBaseline } from '@mui/material';
-import { useLocation, useNavigate } from "react-router-dom";
+import { CssBaseline } from '@mui/material';
+import { useNavigate } from "react-router-dom";
 import { useAuth0 } from '@auth0/auth0-react';
 import { styled } from '@mui/material/styles';
 
