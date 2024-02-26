@@ -78,7 +78,9 @@ const Booking: React.FC = () => {
       console.log(device_list);
       const link = proxy
       const token = await getAccessTokenSilently();
-      await fetch(`${link}/devices/filter?startTime=${startTime.utc().unix() + startTime.utcOffset() * 60}&endTime=${endTime.utc().unix() + endTime.utcOffset() * 60}`,{
+      let filter_start = startTime.year(date.year()).month(date.month()).date(date.date());
+      let filter_end = endTime.year(date.year()).month(date.month()).date(date.date());
+      await fetch(`${link}/devices/filter?startTime=${filter_start.utc().unix() + filter_start.utcOffset() * 60}&endTime=${filter_end.utc().unix() + filter_end.utcOffset() * 60}`,{
         method: 'GET',
         headers: {
             'Content-Type': 'application/json',
@@ -121,7 +123,8 @@ const Booking: React.FC = () => {
     console.log(startTime.add(3, 'hour'));
     if (!testing) {
       // enforce min start time and end time rules
-      if (date.date() > now.date()) {
+      if (date > now) {
+        console.log("FUTURE");
         setMinStart(null);
         setMinEnd(null);
       } else {
