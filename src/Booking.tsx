@@ -18,7 +18,7 @@ import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import { proxy } from './util/constants';
 import { useNavigate, useLocation } from "react-router-dom";
 import { useAuth0 } from '@auth0/auth0-react';
-import { addTimeWithCeiling, roundUpTime } from './util/timeUtils';
+import { addTimeWithCeiling, roundDownTime, roundUpTime } from './util/timeUtils';
 
 
 dayjs.extend(utc);
@@ -64,14 +64,18 @@ const Booking: React.FC = () => {
       }
       return res.json();
     }).then((data)=>{
+      console.log(data)
       data = data.filter(device => device.status === "NOT BOOKED");
-      setAvailDevices(data)
-    }).then(() => deviceDateFilter())
+      return data;
+    }).then((data) => deviceDateFilter(data))
+    console.log(availDevices)
   }
 
-  const deviceDateFilter = async () =>{
-    if (availDevices.length > 0) {
-      console.log(availDevices);
+  const deviceDateFilter = async (device_list) =>{
+    console.log("WE ARE NOW FILTERING")
+    console.log(device_list)
+    if (device_list.length > 0) {
+      console.log(device_list);
       const link = proxy
       const token = await getAccessTokenSilently();
       await fetch(`${link}/devices/filter?startTime=${startTime.utc().unix() + startTime.utcOffset() * 60}&endTime=${endTime.utc().unix() + endTime.utcOffset() * 60}`,{
@@ -92,15 +96,13 @@ const Booking: React.FC = () => {
         })
         console.log(taken_set);
         let new_avail = [];
-        availDevices.forEach((device) => {
+        device_list.forEach((device) => {
           console.log(device);
           if (!(taken_set.has(device.device_id))) {
             new_avail.push(device)
           }
         });
-        console.log(availDevices);
         setAvailDevices(new_avail);
-        console.log(new_avail);
       })
     }
   }
@@ -123,7 +125,7 @@ const Booking: React.FC = () => {
         setMinStart(null);
         setMinEnd(null);
       } else {
-        setMinStart(roundUpTime(now));
+        setMinStart(roundDownTime(now));
         setMinEnd(roundUpTime(now).add(15, 'minute'));
       }
       // when start is changed to after end, shift end

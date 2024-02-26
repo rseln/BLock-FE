@@ -28,6 +28,26 @@ export const roundUpTime = (timestamp) => {
     return timestamp.hour(hours).minute(minutes).second(seconds);
 }
 
+export const roundDownTime = (timestamp) => {
+    let hours = timestamp.hour();
+    let minutes = timestamp.minute();
+    let seconds = timestamp.second();
+    
+    if (minutes > 0 && minutes <= 15) {
+        minutes = 0;
+    } else if (minutes > 15 && minutes <= 30) {
+        minutes = 15;
+    } else if (minutes > 30 && minutes <= 45) {
+        minutes = 30;
+    } else {
+        hours -= 1;
+        minutes = 45;
+    }
+    seconds = 0;
+
+    return timestamp.hour(hours).minute(minutes).second(seconds);
+}
+
 export const addTimeWithCeiling = (timestamp, addend, unit) => {
     let new_time = timestamp.add(addend, unit);
     if (new_time.date() > timestamp.date()) {

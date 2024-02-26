@@ -74,6 +74,7 @@ const Upcoming = () => {
         const booking_id = data[i].booking_id
 
         // only push dates and times that are in the future
+        console.log(new Date(data[i].end_time), new Date())
         if (new Date(data[i].end_time) >= new Date()){
           parsedData.push({date, startTime, endTime, booking_id})
         }
@@ -85,7 +86,7 @@ const Upcoming = () => {
         setStart(getTime(data[0].start_time))
         setEnd(getTime(data[0].end_time))
       }
-      console.log(data)
+      console.log(parsedData)
     })
   }
 
