@@ -63,7 +63,7 @@ const Home = () => {
             const keypadCode = data[i].keypad_code
   
             parsedData.push({deviceId, timeFrame, keypadCode})
-          }  
+          } 
         }
         setBookings(parsedData)
         console.log(parsedData)
@@ -147,9 +147,15 @@ const Home = () => {
         <Typography align="center" component="h2" variant="h2" sx={{ py: 3 }}>
           {estimateTime()}
         </Typography>
-        <List>
+
+        { bookings.length === 0 ? (
+        <>
+          <Typography align="center" component="h5" variant="h5" sx={{ py: 5 }}>
+            You have no lockers booked right now.  
+          </Typography>
+          <List>
           <Typography align="center" component="h3" variant="h3" sx={{ py: 3 }}>
-            Locks:
+            Locks Status:
           </Typography>
           {devices && devices.map(device => (
             <ListItem sx={{justifyContent:'center'}} key={device.device_id}>
@@ -168,20 +174,17 @@ const Home = () => {
             </ListItem>
           ))}
         </List>
-
-        { bookings.length === 0 ? 
-          (<Typography align="center" component="h5" variant="h5" sx={{ py: 5 }}>
-            You have no lockers booked right now.  
-          </Typography>)
+        </>)
           :
           // NOT SURE WHAT THE DATA LOOKS LIKE SO HERES SOME SCUFFED CODE:
           (<>
-          <Typography align="center" component="h6" variant="h6">
-            Instructions: Enter the keypad code followed by # to unlock the locker. Press * to re-lock.
-          </Typography>
+          <Typography align="center" component="h4" variant='h4' sx={{ paddingBlock: '40px' }}>You have a booking right now:</Typography>
           <BookingDetail text="Locker Number" value={bookings[0].deviceId}></BookingDetail>
           <BookingDetail text="Keypad Code" value={bookings[0].keypadCode}></BookingDetail>
           <BookingDetail text="Booking Time Frame" value={getTime(bookings[0].timeFrame)}></BookingDetail>
+          <Typography align="center" component="p" sx={{ fontStyle: 'italic', paddingBlock: '50px' }}>
+            Instructions: Enter the keypad code followed by # to unlock the locker. Press * to re-lock.
+          </Typography>
           </>)
         }
         
