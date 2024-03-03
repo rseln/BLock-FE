@@ -157,7 +157,7 @@ const Home = () => {
           </Typography>
           <List>
           <Typography align="center" component="h3" variant="h3" sx={{ py: 3 }}>
-            Locks Status:
+            Lock Statuses:
           </Typography>
           {devices && devices.map(device => (
             <ListItem sx={{justifyContent:'center'}} key={device.device_id}>
