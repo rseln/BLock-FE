@@ -58,6 +58,10 @@ const Upcoming = () => {
         },
     })
     .then(response  => {return response.json()})
+    .catch(err => {
+      console.log(err);
+      return {};
+    })
     .then(data => {
       console.log(data)
       const parsedData = [];

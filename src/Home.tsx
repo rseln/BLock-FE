@@ -1,16 +1,10 @@
 import React, {useState, useEffect} from 'react'
-// import Login from "./Login";
 import BookingDetail from './components/BookingDetail';
 import { List, ListItem, ListItemText, Typography } from '@mui/material';
-import Paper from '@mui/material/Paper';
-import Stack from '@mui/material/Stack';
 import Box from '@mui/material/Box';
-import Grid from '@mui/material/Grid';
 import Container from '@mui/material/Container';
-import CssBaseline from '@mui/material/CssBaseline';
 import { proxy } from './util/constants';
 import { getTime } from './util/timeUtils';
-import { useNavigate } from "react-router-dom";
 import { useAuth0 } from '@auth0/auth0-react';
 import { Cancel, CheckCircle } from '@mui/icons-material';
 import { green, red } from '@mui/material/colors';
@@ -48,6 +42,10 @@ const Home = () => {
           },
       })
       .then(response  => {return response.json()})
+      .catch((err)=>{
+        console.log(err);
+        return {};
+      })
       .then(async data => {
         console.log("HELLO", data)
         const parsedData = []
@@ -84,6 +82,9 @@ const Home = () => {
           throw new Error(`HTTP error! Status: ${res.status}`);
         }
         return res.json();
+      }).catch((err)=>{
+        console.log(err);
+        return {};
       }).then((data)=>{
         deviceDateFilter(data);
       })
@@ -108,6 +109,9 @@ const Home = () => {
             throw new Error(`HTTP error! Status: ${res.status}`);
           }
           return res.json();
+        }).catch((err)=>{
+          console.log(err);
+          return {};
         }).then((data)=>{
           let taken_set = new Set();
           data.forEach((device) => {
@@ -130,8 +134,6 @@ const Home = () => {
     getDevices();
     getHomePageData();
   },[])
-
-  
 
   return (
     <Container component="main" maxWidth="sm">
