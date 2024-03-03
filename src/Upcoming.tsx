@@ -114,6 +114,7 @@ const Upcoming = () => {
                           <DeleteIcon />
                         </IconButton>
                       }
+                      key={reservation.booking_id}
                     >
                       <ListItemText
                         primary={`${reservation.startTime} to ${reservation.endTime} on`}

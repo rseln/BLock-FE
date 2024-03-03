@@ -80,7 +80,7 @@ const Booking: React.FC = () => {
       const token = await getAccessTokenSilently();
       let filter_start = startTime.year(date.year()).month(date.month()).date(date.date());
       let filter_end = endTime.year(date.year()).month(date.month()).date(date.date());
-      await fetch(`${link}/devices/filter?startTime=${filter_start.utc().unix() + filter_start.utcOffset() * 60}&endTime=${filter_end.utc().unix() + filter_end.utcOffset() * 60}`,{
+      await fetch(`${link}/devices/filter?startTime=${filter_start.utc().unix()}&endTime=${filter_end.utc().unix()}`,{
         method: 'GET',
         headers: {
             'Content-Type': 'application/json',

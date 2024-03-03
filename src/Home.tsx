@@ -97,7 +97,7 @@ const Home = () => {
         const token = await getAccessTokenSilently();
         let filter_start = now;
         let filter_end = now.add(15, 'minute');
-        await fetch(`${link}/devices/filter?startTime=${filter_start.utc().unix() + filter_start.utcOffset() * 60}&endTime=${filter_end.utc().unix() + filter_end.utcOffset() * 60}`,{
+        await fetch(`${link}/devices/filter?startTime=${filter_start.utc().unix()}&endTime=${filter_end.utc().unix()}`,{
           method: 'GET',
           headers: {
               'Content-Type': 'application/json',
