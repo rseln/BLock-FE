@@ -63,6 +63,9 @@ const Booking: React.FC = () => {
         throw new Error(`HTTP error! Status: ${res.status}`);
       }
       return res.json();
+    }).catch((err)=>{
+      console.log(err);
+      return {};
     }).then((data)=>{
       console.log(data)
       data = data.filter(device => device.status === "NOT BOOKED");
@@ -80,7 +83,7 @@ const Booking: React.FC = () => {
       const token = await getAccessTokenSilently();
       let filter_start = startTime.year(date.year()).month(date.month()).date(date.date());
       let filter_end = endTime.year(date.year()).month(date.month()).date(date.date());
-      await fetch(`${link}/devices/filter?startTime=${filter_start.utc().unix() + filter_start.utcOffset() * 60}&endTime=${filter_end.utc().unix() + filter_end.utcOffset() * 60}`,{
+      await fetch(`${link}/devices/filter?startTime=${filter_start.utc().unix()}&endTime=${filter_end.utc().unix()}`,{
         method: 'GET',
         headers: {
             'Content-Type': 'application/json',
@@ -91,6 +94,9 @@ const Booking: React.FC = () => {
           throw new Error(`HTTP error! Status: ${res.status}`);
         }
         return res.json();
+      }).catch((err)=>{
+        console.log(err);
+        return {};
       }).then((data)=>{
         let taken_set = new Set();
         data.forEach((device) => {
@@ -124,7 +130,6 @@ const Booking: React.FC = () => {
     if (!testing) {
       // enforce min start time and end time rules
       if (date > now) {
-        console.log("FUTURE");
         setMinStart(null);
         setMinEnd(null);
       } else {
@@ -136,7 +141,7 @@ const Booking: React.FC = () => {
         setEndTime(startTime.add(15, 'minute'));
       } else if (endTime.diff(startTime, 'minute') > 180) {
         // if greater than 3 hour diff
-        setEndTime(startTime.add(3, 'hour'));
+        setEndTime(addTimeWithCeiling(startTime, 3, 'hour'));
       }
     }
 
@@ -146,9 +151,13 @@ const Booking: React.FC = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault()
-    let dateString = date.format('YYYY-MM-DD')
-    let start_time = dateString + " " + startTime.format('HH:mm:ss')
-    let end_time = dateString + " " + endTime.format('HH:mm:ss')
+    // let dateString = date.format('YYYY-MM-DD')
+    // let start_time = dateString + " " + startTime.format('HH:mm:ss')
+    // let end_time = dateString + " " + endTime.format('HH:mm:ss')
+
+    let start_time = startTime.year(date.year()).month(date.month()).date(date.date()).utc().format('YYYY-MM-DD HH:mm:ss');
+    let end_time = endTime.year(date.year()).month(date.month()).date(date.date()).utc().format('YYYY-MM-DD HH:mm:ss');
+
     const token = await getAccessTokenSilently();
     const link = proxy
     await fetch(`${link}/bookings/create`, {

@@ -1,23 +1,19 @@
 import React, {useState, useEffect} from 'react'
-// import Login from "./Login";
 import BookingDetail from './components/BookingDetail';
 import { List, ListItem, ListItemText, Typography } from '@mui/material';
-import Paper from '@mui/material/Paper';
-import Stack from '@mui/material/Stack';
 import Box from '@mui/material/Box';
-import Grid from '@mui/material/Grid';
 import Container from '@mui/material/Container';
-import CssBaseline from '@mui/material/CssBaseline';
 import { proxy } from './util/constants';
 import { getTime } from './util/timeUtils';
-import { useNavigate } from "react-router-dom";
 import { useAuth0 } from '@auth0/auth0-react';
 import { Cancel, CheckCircle } from '@mui/icons-material';
 import { green, red } from '@mui/material/colors';
+import dayjs, { Dayjs } from 'dayjs';
 
 const Home = () => {
   const {user, getAccessTokenSilently } = useAuth0();
   const today = new Date()
+  var now = dayjs()
   const [devices, setDevices] = useState<Array<any>>();
   const estimateTime = () => {
     const curHour = today.getHours()
@@ -46,6 +42,10 @@ const Home = () => {
           },
       })
       .then(response  => {return response.json()})
+      .catch((err)=>{
+        console.log(err);
+        return {};
+      })
       .then(async data => {
         console.log("HELLO", data)
         const parsedData = []
@@ -61,7 +61,7 @@ const Home = () => {
             const keypadCode = data[i].keypad_code
   
             parsedData.push({deviceId, timeFrame, keypadCode})
-          }  
+          } 
         }
         setBookings(parsedData)
         console.log(parsedData)
@@ -82,16 +82,58 @@ const Home = () => {
           throw new Error(`HTTP error! Status: ${res.status}`);
         }
         return res.json();
+      }).catch((err)=>{
+        console.log(err);
+        return {};
       }).then((data)=>{
-        setDevices(data);
+        deviceDateFilter(data);
       })
+    }
+
+    const deviceDateFilter = async (device_list) =>{
+      console.log(device_list)
+      if (device_list.length > 0) {
+        console.log(device_list);
+        const link = proxy
+        const token = await getAccessTokenSilently();
+        let filter_start = now;
+        let filter_end = now.add(15, 'minute');
+        await fetch(`${link}/devices/filter?startTime=${filter_start.utc().unix()}&endTime=${filter_end.utc().unix()}`,{
+          method: 'GET',
+          headers: {
+              'Content-Type': 'application/json',
+              authorization: `Bearer ${token}`
+          }
+        }).then((res)=>{
+          if (!res.ok) {
+            throw new Error(`HTTP error! Status: ${res.status}`);
+          }
+          return res.json();
+        }).catch((err)=>{
+          console.log(err);
+          return {};
+        }).then((data)=>{
+          let taken_set = new Set();
+          data.forEach((device) => {
+            taken_set.add(device.device_id);
+          })
+          console.log(taken_set);
+          device_list.forEach((device) => {
+            console.log(device);
+            if (taken_set.has(device.device_id)) {
+              device.status = "LOCKED";
+            } else {
+              device.status = "UNLOCKED";
+            }
+          });
+          setDevices(device_list);
+        })
+      }
     }
 
     getDevices();
     getHomePageData();
   },[])
-
-  
 
   return (
     <Container component="main" maxWidth="sm">
@@ -107,12 +149,18 @@ const Home = () => {
         <Typography align="center" component="h2" variant="h2" sx={{ py: 3 }}>
           {estimateTime()}
         </Typography>
-        <List>
+
+        { bookings.length === 0 ? (
+        <>
+          <Typography align="center" component="h5" variant="h5" sx={{ py: 5 }}>
+            You have no lockers booked right now.  
+          </Typography>
+          <List>
           <Typography align="center" component="h3" variant="h3" sx={{ py: 3 }}>
-            Locks:
+            Lock Availabilities:
           </Typography>
           {devices && devices.map(device => (
-            <ListItem sx={{justifyContent:'center'}}>
+            <ListItem sx={{justifyContent:'center'}} key={device.device_id}>
               {device.status === 'UNLOCKED' ? (
                 <Typography component="h5" variant="h5">
                   Lock {device.device_id}
@@ -128,20 +176,17 @@ const Home = () => {
             </ListItem>
           ))}
         </List>
-
-        { bookings.length === 0 ? 
-          (<Typography align="center" component="h5" variant="h5" sx={{ py: 5 }}>
-            You have no lockers booked right now.  
-          </Typography>)
+        </>)
           :
           // NOT SURE WHAT THE DATA LOOKS LIKE SO HERES SOME SCUFFED CODE:
           (<>
-          <Typography align="center" component="h6" variant="h6">
-            Instructions: Enter the keypad code followed by # to unlock the locker. Press * to re-lock.
-          </Typography>
+          <Typography align="center" component="h4" variant='h4' sx={{ paddingBlock: '40px' }}>You have a booking right now:</Typography>
           <BookingDetail text="Locker Number" value={bookings[0].deviceId}></BookingDetail>
           <BookingDetail text="Keypad Code" value={bookings[0].keypadCode}></BookingDetail>
-          <BookingDetail text="Booking Time Frame" value={bookings[0].timeFrame}></BookingDetail>
+          <BookingDetail text="Booking Time Frame" value={(bookings[0].timeFrame)}></BookingDetail>
+          <Typography align="center" component="p" sx={{ fontStyle: 'italic', paddingBlock: '50px' }}>
+            Instructions: Enter the keypad code followed by # to unlock the locker. Press * to re-lock.
+          </Typography>
           </>)
         }
         
