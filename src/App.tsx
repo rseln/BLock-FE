@@ -51,7 +51,7 @@ const Auth0ProviderWithRedirectCallback = ({ children, domain, clientId, authori
     navigate((appState && appState.returnTo) || window.location.pathname);
   };
   return (
-    <Auth0Provider domain={domain} clientId={clientId} onRedirectCallback={onRedirectCallback} authorizationParams={authorizationParams} >
+    <Auth0Provider domain={domain} clientId={clientId} onRedirectCallback={onRedirectCallback} authorizationParams={authorizationParams} cacheLocation={"localstorage"} useRefreshTokens={true} >
       {children}
     </Auth0Provider>
   );
